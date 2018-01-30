@@ -1,9 +1,11 @@
 #UserVoiceInput = "Hey google, set an alarm for four thirty"
-UserVoiceInput = "write a note for me"
-VoiceArray = UserVoiceInput.split(" ")
-print (VoiceArray)
+UserVoiceInput = "write a note for me" #placeholder voice-interpreted text
 
+VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
 
+#print (VoiceArray) ##DEBUG LINE
+
+##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm"]
 CommandThreeWords = ["calendar", "event","date","schedule"]
@@ -12,6 +14,7 @@ CommandFiveWords = ["take", "write", "note"]
 CommandSixWords = ["make", "list", "create"]
 CommandSevenWords = ["add", "list", "write",]
 
+##--Total Matched Words with Trigger Words--##
 CommandOneCount = 0
 CommandTwoCount = 0
 CommandThreeCount = 0
@@ -20,7 +23,7 @@ CommandFiveCount = 0
 CommandSixCount = 0
 CommandSevenCount = 0
 
-
+##--Placeholder Functions For Each Function--##
 def Command1(UserVoiceInput):
         print ("Attempting to play music...")
 def Command2(UserVoiceInput):
@@ -35,7 +38,8 @@ def Command6(UserVoiceInput):
         print ("Attempting to add to list...")
 def Command7(UserVoiceInput):
         print ("Attempting to create list...")
-       
+
+##--Word Matching--##
 for i in range (0, len(VoiceArray)):
     for x in range (0, len(CommandOneWords)):
         if VoiceArray[i] == CommandOneWords[x]:
@@ -60,7 +64,7 @@ for i in range (0, len(VoiceArray)):
             CommandSevenCount+=1
 
 
-
+##--Command with most matches is called--##
 Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
 
 Maximum=max(Counts)
