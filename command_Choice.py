@@ -1,13 +1,13 @@
 #UserVoiceInput = "Hey google, set an alarm for four thirty"
-UserVoiceInput = "write a note for me" #placeholder voice-interpreted text
-
+UserVoiceInput = input() #placeholder voice-interpreted text
+UserVoiceInput = UserVoiceInput.lower()
 VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
 
 #print (VoiceArray) ##DEBUG LINE
 
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
-CommandTwoWords = ["set", "alarm"]
+CommandTwoWords = ["set", "alarm", "timer"]
 CommandThreeWords = ["calendar", "event","date","schedule"]
 CommandFourWords = ["whats", "on", "schedule"]
 CommandFiveWords = ["take", "write", "note"]
