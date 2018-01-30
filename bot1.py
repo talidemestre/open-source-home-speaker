@@ -1,20 +1,20 @@
-UserVoiceInput = "execute command two"
+UserVoiceInput = "Hey google, set alarm"
 
 VoiceArray = UserVoiceInput.split(" ")
 print (VoiceArray)
 
 
-CommandOneWords = ["command", "one"]
-CommandTwoWords = ["command", "two"]
+CommandOneWords = ["play", "music"]
+CommandTwoWords = ["set", "alarm"]
 
 CommandOneCount = 0
 CommandTwoCount = 0
 
 def Command1(UserVoiceInput):
-        print ("This is the first command")
+        print ("Attempting to play music...")
 
 def Command2(UserVoiceInput):
-        print ("This is the second command")
+        print ("Attempting to set Alarm...")
         
 for i in range (0, len(VoiceArray)):
     for x in range (0, len(CommandOneWords)):
