@@ -68,18 +68,23 @@ for i in range (0, len(VoiceArray)):
 Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
 
 Maximum=max(Counts)
-
-if CommandOneCount== Maximum:
+if Maximum == 0:
+        print("I didnt quite get that")
+elif CommandOneCount== Maximum:
     Command1(UserVoiceInput)
-if CommandTwoCount== Maximum:
+elif CommandTwoCount== Maximum:
     Command2(UserVoiceInput)
-if CommandThreeCount== Maximum:
+elif CommandThreeCount== Maximum:
     Command3(UserVoiceInput)
-if CommandFourCount== Maximum:
+elif CommandFourCount== Maximum:
     Command4(UserVoiceInput)
-if CommandFiveCount== Maximum:
+elif CommandFiveCount== Maximum:
     Command5(UserVoiceInput)
-if CommandSixCount== Maximum:
+elif CommandSixCount== Maximum:
     Command6(UserVoiceInput)
-if CommandSevenCount== Maximum:
+elif CommandSevenCount== Maximum:
     Command7(UserVoiceInput)
+else:
+        print("Sorry, something unexpected just happened.")
+        
+        
