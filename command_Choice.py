@@ -69,7 +69,7 @@ Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,Co
 
 Maximum=max(Counts)
 if Maximum == 0:
-        print("I didnt quite get that")
+        print("I'm sorry, I can't help with that.")
 elif CommandOneCount== Maximum:
     Command1(UserVoiceInput)
 elif CommandTwoCount== Maximum:
