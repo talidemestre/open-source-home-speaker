@@ -1,3 +1,4 @@
+import pypygo
 #UserVoiceInput = "Hey google, set an alarm for four thirty"
 UserVoiceInput = input() #placeholder voice-interpreted text
 UserVoiceInput = UserVoiceInput.lower()
@@ -38,6 +39,11 @@ def Command6(UserVoiceInput):
         print ("Attempting to add to list...")
 def Command7(UserVoiceInput):
         print ("Attempting to create list...")
+        
+def Search (UserVoiceInput):
+        print("I ran a search for " + UserVoiceInput +":")
+        search=pypygo.query(UserVoiceInput)
+        print(search.abstract)
 
 ##--Word Matching--##
 for i in range (0, len(VoiceArray)):
@@ -69,7 +75,7 @@ Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,Co
 
 Maximum=max(Counts)
 if Maximum == 0:
-        print("I'm sorry, I can't help with that.")
+        Search(UserVoiceInput)
 elif CommandOneCount== Maximum:
     Command1(UserVoiceInput)
 elif CommandTwoCount== Maximum:
@@ -85,6 +91,6 @@ elif CommandSixCount== Maximum:
 elif CommandSevenCount== Maximum:
     Command7(UserVoiceInput)
 else:
-        print("Sorry, something unexpected just happened.")
+        Search(UserVoiceInput)
         
         
