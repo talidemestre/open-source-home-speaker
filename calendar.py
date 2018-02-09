@@ -21,4 +21,13 @@ for x in years:
     #increases year count for leap year checking
     year+=1
 
-testDate = "set the date feed the baby for twenty third March 2018"
+testDate = "set the date feed the baby for twenty third march twenty eighteen"
+testDate = testDate.split(' ')
+print (testDate)
+dayList = ['first second third fourth fifth sixth seventh eighth ninth tenth eleventh twelfth thirteenth fourteenth fifteenth sixteenth seventeenth eighteenth nineteenth twentieth']
+monthList = ['january',  'february', 'march', 'april', 'may', 'june', 'july', 'august','september', 'october','november','december']
+for word in range(0, len(testDate)):
+    for month in range(0, len(monthList)):
+        if testDate[word] == monthList[month]:
+            FinalMonth = month
+    
