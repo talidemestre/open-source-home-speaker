@@ -25,9 +25,9 @@ for x in years:
 
 testDate = "set the date feed the baby for twenty third march twenty eighteen"
 testDate = testDate.split(' ')
-FinalMonth = int(time.strftime("%M"))
+FinalMonth = 12
 FinalDay=32
-FinalYear=int(time.strftime("%Y"))
+FinalYear=2000
 
 print (testDate)
 
@@ -47,15 +47,5 @@ for word in range(0, len(testDate)):
     for day in range(0, len(dayList)):
         if testDate[word] == dayList[day]:
             FinalDay = day
-    if testDate[word] == 'twenty':
-        for y in range(0, len(yearSuffix)):
-            if testDate[word+1] == yearSuffix[y]:
-                FinalYear == yearSuffix[y] + 2018
-        for z in range(0, len(daySuffix)):
-            if testDate[word+1] == daySuffix[z]:
-                FinalDay= z + 20
-    if testDate[word] == 'two':
-        if testDate[word+1] == 'thousand':
-            for y in range(0, len(yearSuffix)):
-                if testDate[word+1] == yearSuffix[y]:
-                    FinalYear == yearSuffix[y] + 2018
+    for 
+    
