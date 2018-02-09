@@ -1,8 +1,10 @@
+import time
+currentYear = int(time.strftime("%Y"))
 years=[]
 #creates intial year array
-for i in range(2018, 2028):
+for i in range(currentYear, currentYear+10):
     years.append([])    
-year = 2018
+year = currentYear
 #populates the years with days and months
 for x in years:    
     for i in range(0,12):        
@@ -18,3 +20,5 @@ for x in years:
             x.append(['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''])
     #increases year count for leap year checking
     year+=1
+
+testDate = "set the date feed the baby for twenty third March 2018"
