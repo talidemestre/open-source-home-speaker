@@ -93,11 +93,6 @@ def Command3(UserVoiceInput):
     print(finalDay, finalMonth, finalYear)
     years[finalYear - int(time.strftime("%Y"))][finalMonth][finalDay] = UserVoiceInput
         
-
-
-
-
-
 def Command4(UserVoiceInput):
         print ("Attempting to gather schedule...")
 def Command5(UserVoiceInput):
