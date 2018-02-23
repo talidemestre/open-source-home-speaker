@@ -22,3 +22,8 @@ for x in years:
             x.append(['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''])
     #increases year count for leap year checking
     year+=1
+
+
+write_data = open('import_calendar.py', 'w')
+write_data.write("years =" + str(years))
+write_data.close()
