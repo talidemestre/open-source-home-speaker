@@ -42,10 +42,13 @@ def Command3(UserVoiceInput):
         dayList = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth', 'twentieth']
         monthList = ['january',  'february', 'march', 'april', 'may', 'june', 'july', 'august','september', 'october','november','december']
 
+        #prefixes/suffixes to be checked to determine the day/date using an iterable string
         prefix =['twenty', 'two']
         midfix ='thousand'
         daySuffix = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth']
         yearSuffix = [ 'eighteen', 'nineteen', 'twenty']
+
+        #iterating through the string and matching against words in the previous strings to determine the requested date
         for word in range(0, len(testDate)):
             for month in range(0, len(monthList)):
                 if testDate[word] == monthList[month]:
@@ -65,8 +68,9 @@ def Command3(UserVoiceInput):
                     for y in range(0, len(yearSuffix)):
                         if testDate[word+1] == yearSuffix[y]:
                             finalYear == yearSuffix[y] + 2018
-
-        print(finalDay, finalMonth, finalYear)
+        
+        #print(finalDay, finalMonth, finalYear)
+        #writing results to the file that stores the calendar
         import_calendar.years[finalYear - int(time.strftime("%Y"))][finalMonth][finalDay] = UserVoiceInput
         write_data = open('import_calendar.py', 'w')
         write_data.write("years =" + str(import_calendar.years))
