@@ -32,6 +32,7 @@ def Command1(UserVoiceInput):
         print ("Attempting to play music...")
 def Command2(UserVoiceInput):
         print ("Attempting to set alarm...")
+#COMMAND THAT SETS DATES        
 def Command3(UserVoiceInput):
         testDate = UserVoiceInput.split(' ')
         finalMonth = int(time.strftime("%M"))
@@ -76,8 +77,34 @@ def Command3(UserVoiceInput):
         write_data.write("creationYear=" + str(import_calendar.creationYear) + "\nyears =" + str(import_calendar.years))
         write_data.close()
         
+##COMMAND THAT GATHERS EVENTS ON CALENDAR        
 def Command4(UserVoiceInput):
-        print ("Attempting to gather schedule...")
+        currentYear = int(time.strftime("%Y"))
+        currentMonth = int(time.strftime("%m"))
+        currentDay =int(time.strftime("%d"))
+        print(str(currentYear) +" " +str(currentMonth)+ " "+str(currentDay))
+
+        arrayYear = currentYear- import_calendar.creationYear
+        arrayMonth = currentMonth - 1
+        arrayDay = currentDay - 1
+
+        day_range = 7
+
+        if (day_range + arrayDay <= len(import_calendar.years[arrayYear][arrayMonth])):
+            for i in range(arrayDay, arrayDay+day_range):
+                print( str(arrayMonth) +" " +  str(i+1))
+                print(import_calendar.years[arrayYear][arrayMonth][i])
+        else:
+            for i in range(arrayDay, arrayDay + (len(import_calendar.years[arrayYear][arrayMonth]) - arrayDay)):
+                print( str(arrayMonth) +" " +  str(i+1))
+                print(import_calendar.years[arrayYear][arrayMonth][i])
+
+
+                
+            for i in range(0, day_range - (len(import_calendar.years[arrayYear][arrayMonth]) - arrayDay)):
+                print( str(arrayMonth+1) +" " +  str(i+1))
+                print(import_calendar.years[arrayYear][arrayMonth + 1][i])
+        
 def Command5(UserVoiceInput):
         print ("Attempting to write note...")
 def Command6(UserVoiceInput):
