@@ -25,5 +25,5 @@ for x in years:
 
 
 write_data = open('import_calendar.py', 'w')
-write_data.write("years =" + str(years))
+write_data.write("creationYear=" + str(currentYear) + "\nyears =" + str(years))
 write_data.close()

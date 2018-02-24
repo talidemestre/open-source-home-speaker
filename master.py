@@ -59,7 +59,7 @@ def Command3(UserVoiceInput):
             if testDate[word] == 'twenty':
                 for y in range(0, len(yearSuffix)):
                     if testDate[word+1] == yearSuffix[y]:
-                        finalYear == yearSuffix[y] + 2018
+                        finalYear == yearSuffix[y] + import_calendar.creationYear
                 for z in range(0, len(daySuffix)):
                     if testDate[word+1] == daySuffix[z]:
                         finalDay= z + 20
@@ -67,13 +67,13 @@ def Command3(UserVoiceInput):
                 if testDate[word+1] == 'thousand':
                     for y in range(0, len(yearSuffix)):
                         if testDate[word+1] == yearSuffix[y]:
-                            finalYear == yearSuffix[y] + 2018
+                            finalYear == yearSuffix[y] + import_calendar.creationYear
         
         #print(finalDay, finalMonth, finalYear)
         #writing results to the file that stores the calendar
         import_calendar.years[finalYear - int(time.strftime("%Y"))][finalMonth][finalDay] = UserVoiceInput
         write_data = open('import_calendar.py', 'w')
-        write_data.write("years =" + str(import_calendar.years))
+        write_data.write("creationYear=" + str(import_calendar.creationYear) + "\nyears =" + str(import_calendar.years))
         write_data.close()
         
 def Command4(UserVoiceInput):
