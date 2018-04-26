@@ -25,6 +25,7 @@ CommandSevenCount = 0
 def Command1(UserVoiceInput):
         print ("Attempting to play music...")
 def Command2(UserVoiceInput):
+        import import_alarms
         hourList = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
         minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
@@ -152,19 +153,7 @@ def Search (UserVoiceInput):
         search=pypygo.query(UserVoiceInput)
         print(search.abstract)
 while True:
-        ##CHECK ALARM##
-        import import_alarms
-        if len(import_alarms.alarms_list) >0:
-                for i in (0, len(import_alarms.alarms_list)-1):
-                    for x in (0, len(import_alarms.alarms_list[i])):
-                        if import_alarms.alarms_list[i][2] == 'AM':
-                            if int(time.strftime("%H"))==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:
-                                print("alarm is sounding")
-                        else:
-                            if int(time.strftime("%H")) - 12 ==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:
-                                print("alarm is sounding")
-                
-         #UserVoiceInput = "Hey google, set an alarm for four thirty"
+        #UserVoiceInput = "Hey google, set an alarm for four thirty"
         UserVoiceInput = input() #placeholder voice-interpreted text
         UserVoiceInput = UserVoiceInput.lower()
         VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
