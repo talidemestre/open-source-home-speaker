@@ -10,20 +10,19 @@ minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "six
 minutePrefix =['twenty','thirty','fourty','fifty','sixty']
 minuteSuffix =['one', 'two', 'three', 'four', 'five', "six", "seven", "eight", "nine"]
 
-
-
 finalHour=0
 finalMinute=0
+
 AMorPM = "PM" ###DEFAULT PLEASE CHANGE###
+
 hour_detected = False
 
 for word in range(0, len(VoiceArray)):
     print (VoiceArray[word])
-    if VoiceArray[word] == 'AM':
-        AMorPM ="AM"
-    if VoiceArray[word] == 'PM':
-        AMorPM ="PM"
-                
+    if VoiceArray[word] == 'AM':#
+        AMorPM ="AM"#
+    if VoiceArray[word] == 'PM':#The voice detection will likely not read these as AM or PM and as such they should be updated.
+        AMorPM ="PM" #               
     if hour_detected == False:
         for num in range (0, len(hourList)):
             if VoiceArray[word] == hourList[num]:

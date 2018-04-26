@@ -1,0 +1,7 @@
+fix calendar
+make alarm cancelable
+creating lists
+spotify integration
+GUI
+
+TEST
