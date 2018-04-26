@@ -2,12 +2,6 @@ import pypygo
 import time
 import import_calendar
 
-#UserVoiceInput = "Hey google, set an alarm for four thirty"
-UserVoiceInput = input() #placeholder voice-interpreted text
-UserVoiceInput = UserVoiceInput.lower()
-VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
-
-#print (VoiceArray) ##DEBUG LINE
 
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
@@ -31,12 +25,53 @@ CommandSevenCount = 0
 def Command1(UserVoiceInput):
         print ("Attempting to play music...")
 def Command2(UserVoiceInput):
-        print ("Attempting to set alarm...")
+        hourList = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+
+        minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+        minutePrefix =['twenty','thirty','fourty','fifty']
+        minuteSuffix =['one', 'two', 'three', 'four', 'five', "six", "seven", "eight", "nine"]
+
+        finalHour=0
+        finalMinute=0
+
+        AMorPM = "PM" ###DEFAULT PLEASE CHANGE###
+
+        hour_detected = False
+
+        for word in range(0, len(VoiceArray)):
+            print (VoiceArray[word])
+            if VoiceArray[word] == 'AM':#
+                AMorPM ="AM"#
+            if VoiceArray[word] == 'PM':#The voice detection will likely not read these as AM or PM and as such they should be updated.
+                AMorPM ="PM" #               
+            if hour_detected == False:
+                for i in range (0, len(hourList)):
+                    if VoiceArray[word] == hourList[i]:
+                        hour_detected = True
+                        finalHour = i+1              
+            else:
+                for i in range (0, len(minutePrefix)):
+                    if VoiceArray[word] == minutePrefix[i]:
+                        finalMinute+= 10*((i+2))
+                for i in range (0, len(minuteSuffix)):
+                    if VoiceArray[word] == minuteSuffix[i]:
+                        finalMinute += i+1
+                for i in range (0, len(minuteMono)):
+                    if VoiceArray[word] == minuteMono[i]:
+                        finalMinute = i + 10
+
+        alarm= [finalHour, finalMinute, AMorPM]
+
+        import_alarms.alarms_list.append(alarm)
+
+        write_data = open('import_alarms.py', 'w')
+        write_data.write("alarms_list=" + str(import_alarms.alarms_list))
+        write_data.close()
 #COMMAND THAT SETS DATES        
 def Command3(UserVoiceInput):
         testDate = UserVoiceInput.split(' ')
-        finalMonth = int(time.strftime("%M"))
-        finalDay=32
+        finalMonth = int(time.strftime("%m"))
+        finalDay=int(time.strftime("%d"))+1
         finalYear=int(time.strftime("%Y"))
         #print (testDate)
 
@@ -116,53 +151,72 @@ def Search (UserVoiceInput):
         print("I ran a search for " + UserVoiceInput +":")
         search=pypygo.query(UserVoiceInput)
         print(search.abstract)
+while True:
+        ##CHECK ALARM##
+        import import_alarms
+        if len(import_alarms.alarms_list) >0:
+                for i in (0, len(import_alarms.alarms_list)-1):
+                    for x in (0, len(import_alarms.alarms_list[i])):
+                        if import_alarms.alarms_list[i][2] == 'AM':
+                            if int(time.strftime("%H"))==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:
+                                print("alarm is sounding")
+                        else:
+                            if int(time.strftime("%H")) - 12 ==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:
+                                print("alarm is sounding")
+                
+         #UserVoiceInput = "Hey google, set an alarm for four thirty"
+        UserVoiceInput = input() #placeholder voice-interpreted text
+        UserVoiceInput = UserVoiceInput.lower()
+        VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
 
-##--Word Matching--##
-for i in range (0, len(VoiceArray)):
-    for x in range (0, len(CommandOneWords)):
-        if VoiceArray[i] == CommandOneWords[x]:
-            CommandOneCount+=1
-    for x in range (0, len(CommandTwoWords)):
-        if VoiceArray[i] == CommandTwoWords[x]:
-            CommandTwoCount+=1
-    for x in range (0, len(CommandThreeWords)):
-        if VoiceArray[i] == CommandThreeWords[x]:
-            CommandThreeCount+=1
-    for x in range (0, len(CommandFourWords)):
-        if VoiceArray[i] == CommandFourWords[x]:
-            CommandFourCount+=1
-    for x in range (0, len(CommandFiveWords)):
-        if VoiceArray[i] == CommandFiveWords[x]:
-            CommandFiveCount+=1
-    for x in range (0, len(CommandSixWords)):
-        if VoiceArray[i] == CommandSixWords[x]:
-            CommandSixCount+=1
-    for x in range (0, len(CommandSevenWords)):
-        if VoiceArray[i] == CommandSevenWords[x]:
-            CommandSevenCount+=1
+        #print (VoiceArray) ##DEBUG LINE
+
+        ##--Word Matching--##
+        for i in range (0, len(VoiceArray)):
+            for x in range (0, len(CommandOneWords)):
+                if VoiceArray[i] == CommandOneWords[x]:
+                    CommandOneCount+=1
+            for x in range (0, len(CommandTwoWords)):
+                if VoiceArray[i] == CommandTwoWords[x]:
+                    CommandTwoCount+=1
+            for x in range (0, len(CommandThreeWords)):
+                if VoiceArray[i] == CommandThreeWords[x]:
+                    CommandThreeCount+=1
+            for x in range (0, len(CommandFourWords)):
+                if VoiceArray[i] == CommandFourWords[x]:
+                    CommandFourCount+=1
+            for x in range (0, len(CommandFiveWords)):
+                if VoiceArray[i] == CommandFiveWords[x]:
+                    CommandFiveCount+=1
+            for x in range (0, len(CommandSixWords)):
+                if VoiceArray[i] == CommandSixWords[x]:
+                    CommandSixCount+=1
+            for x in range (0, len(CommandSevenWords)):
+                if VoiceArray[i] == CommandSevenWords[x]:
+                    CommandSevenCount+=1
 
 
-##--Command with most matches is called--##
-Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
+        ##--Command with most matches is called--##
+        Counts = [CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
 
-Maximum=max(Counts)
-if Maximum == 0:
-        Search(UserVoiceInput)
-elif CommandOneCount== Maximum:
-    Command1(UserVoiceInput)
-elif CommandTwoCount== Maximum:
-    Command2(UserVoiceInput)
-elif CommandThreeCount== Maximum:
-    Command3(UserVoiceInput)
-elif CommandFourCount== Maximum:
-    Command4(UserVoiceInput)
-elif CommandFiveCount== Maximum:
-    Command5(UserVoiceInput)
-elif CommandSixCount== Maximum:
-    Command6(UserVoiceInput)
-elif CommandSevenCount== Maximum:
-    Command7(UserVoiceInput)
-else:
-        Search(UserVoiceInput)
+        Maximum=max(Counts)
+        if Maximum == 0:
+                Search(UserVoiceInput)
+        elif CommandOneCount== Maximum:
+            Command1(UserVoiceInput)
+        elif CommandTwoCount== Maximum:
+            Command2(UserVoiceInput)
+        elif CommandThreeCount== Maximum:
+            Command3(UserVoiceInput)
+        elif CommandFourCount== Maximum:
+            Command4(UserVoiceInput)
+        elif CommandFiveCount== Maximum:
+            Command5(UserVoiceInput)
+        elif CommandSixCount== Maximum:
+            Command6(UserVoiceInput)
+        elif CommandSevenCount== Maximum:
+            Command7(UserVoiceInput)
+        else:
+                Search(UserVoiceInput)
         
         

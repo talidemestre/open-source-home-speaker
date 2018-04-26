@@ -27,3 +27,8 @@ for x in years:
 write_data = open('import_calendar.py', 'w')
 write_data.write("creationYear=" + str(currentYear) + "\nyears =" + str(years))
 write_data.close()
+
+
+write_data = open('import_alarms.py', 'w')
+write_data.write("alarms_list=[]")
+write_data.close()
