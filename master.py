@@ -35,7 +35,7 @@ def Command2(UserVoiceInput):
         finalHour=0
         finalMinute=0
 
-        AMorPM = "PM" ###DEFAULT PLEASE CHANGE###
+        AMorPM = "AM" ###DEFAULT PLEASE CHANGE###
 
         hour_detected = False
 
