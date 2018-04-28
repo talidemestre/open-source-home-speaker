@@ -1,3 +1,5 @@
+VOICE ACTIVATION
+TEXT TO SPEECH
 fix calendar
 make certain permanent alarms (a file that reapplies the alarms after they have been deleted)
 creating lists
