@@ -3,6 +3,7 @@ import time
 import import_calendar
 import importlib
 import import_alarms
+import import_perma_alarms
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
@@ -19,6 +20,8 @@ def Command1(UserVoiceInput):
         print ("Attempting to play music...")
 def Command2(UserVoiceInput):
         importlib.reload(import_alarms)
+        importlib.reload(import_perma_alarms)
+
         hourList = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
         minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
@@ -32,8 +35,13 @@ def Command2(UserVoiceInput):
 
         hour_detected = False
 
+        permanent=False
+
+        
         for word in range(0, len(VoiceArray)):
             print (VoiceArray[word])
+            if VoiceArray[word] == 'permanent' or VoiceArray[word]=='perma':
+                permanent = True
             if VoiceArray[word] == 'am':#
                 AMorPM ="AM"#
             if VoiceArray[word] == 'pm':#The voice detection will likely not read these as AM or PM and as such they should be updated.
@@ -61,6 +69,12 @@ def Command2(UserVoiceInput):
         write_data = open('import_alarms.py', 'w')
         write_data.write("alarms_list=" + str(import_alarms.alarms_list))
         write_data.close()
+
+        if permanent == True:
+                import_perma_alarms.alarms_list.append(alarm)
+                write_data = open('import_perma_alarms.py', 'w')
+                write_data.write("alarms_list=" + str(import_perma_alarms.alarms_list))
+                write_data.close()
 #COMMAND THAT SETS DATES        
 def Command3(UserVoiceInput):
         importlib.reload(import_calendar)
@@ -163,11 +177,11 @@ def Command7(UserVoiceInput):
         print ("Attempting to create list...")
 def Command8(UserVoiceInput):
         importlib.reload(import_alarms)
-        currentHour=int(time.strftime("%H"))
+        currentHour=int(time.strftime("%I"))
         currentMinute=int(time.strftime("%M"))
         currentFormat=time.strftime("%p")
         
-        print(time.strftime("%H"))
+        print(time.strftime("%I"))
         print(time.strftime("%M"))
         print(time.strftime("%p"))
 

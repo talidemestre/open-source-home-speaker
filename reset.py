@@ -32,3 +32,7 @@ write_data.close()
 write_data = open('import_alarms.py', 'w')
 write_data.write("alarms_list=[]")
 write_data.close()
+
+write_data = open('import_perma_alarms.py', 'w')
+write_data.write("alarms_list=[]")
+write_data.close()
