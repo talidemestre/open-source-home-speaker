@@ -1,5 +1,5 @@
 fix calendar
-make alarm cancelable
+make certain permanent alarms (a file that reapplies the alarms after they have been deleted)
 creating lists
 spotify integration
 GUI
