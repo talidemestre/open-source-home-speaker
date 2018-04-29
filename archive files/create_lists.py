@@ -8,6 +8,8 @@ UserVoiceInput = UserVoiceInput.lower()
 VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
 
 
+
+
 synonyms = ["list", "named", "called", "titled", "dubbed", "labelled", "termed", "christened", "denominated", "termed", "styled", "identified", "entititled", "termed"] #these are all synonyms for 'named' so that the program can determine what to name the list
 title_after=0 #position of last word before title, default
 

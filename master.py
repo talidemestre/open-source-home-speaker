@@ -4,14 +4,16 @@ import import_calendar
 import importlib
 import import_alarms
 import import_perma_alarms
+import import_lists
+
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
 CommandThreeWords = ["set", "calendar", "event","date","schedule"]
 CommandFourWords = ["whats", "on", "schedule", "calendar"]
 CommandFiveWords = ["take", "write", "note"]
-CommandSixWords = ["make", "list", "create"]
-CommandSevenWords = ["add", "list", "write"]
+CommandSixWords = ["make", "list", "create", "named", "called", "titled"]
+CommandSevenWords = ["add", "to", "list", "write"]
 CommandEightWords = ["cancel", "alarm", "music", "stop", "pause","cease","end","terminate","conclude","finish","desist"]
 
 
@@ -172,9 +174,63 @@ def Command4(UserVoiceInput):
 def Command5(UserVoiceInput):
         print ("Attempting to write note...")
 def Command6(UserVoiceInput):
-        print ("Attempting to add to list...")
+        importlib.reload(import_lists)
+        synonyms = ["list", "named", "called", "titled", "dubbed", "labelled", "termed", "christened", "denominated", "termed", "styled", "identified", "entititled", "termed"] #these are all synonyms for 'named' so that the program can determine what to name the list
+        title_after=0 #position of last word before title, default
+
+
+        title = 'list' #default title
+
+
+        #searching for synonym of 'named'
+        for i in range(0, len(VoiceArray)):
+            for x in synonyms:
+                if VoiceArray[i] == x:
+                    title_after = i
+
+
+
+        #allocating title
+        title = VoiceArray[title_after + 1]
+
+        new_list = [title]
+
+        dupe_found = False#tests if title is duplicate of existing title
+        for i in import_lists.lists:
+            if i[0] == title:
+                dupe_found = True
+                
+        if dupe_found == False:        
+            import_lists.lists.append(new_list)
+
+            write_data = open('import_lists.py', 'w')
+            write_data.write("lists=" +str(import_lists.lists))
+            write_data.close()
+        else:
+            print("You already have a list titled with that.")    
+
 def Command7(UserVoiceInput):
-        print ("Attempting to create list...")
+        importlib.reload(import_lists)
+        list_found = 0
+        string_add = ''  #this is the element to be added to list
+
+        title_found = False
+        for i in VoiceArray:#iterates through voice string
+            if title_found == True:#first so that when title is found, title is not added
+                string_add = str(string_add + " " + i)
+            for x in range(0, len(import_lists.lists)):#iterates throught lists
+                if title_found == False:#ensures always matches the leftmost match
+                    if i == import_lists.lists[x][0]:#attempts to match voice word with list title
+                        title_found = True#ends matching attempts
+                        list_found=x#index of list
+
+                    
+        import_lists.lists[list_found].append(string_add)
+
+        write_data = open('import_lists.py', 'w')
+        write_data.write("lists=" +str(import_lists.lists))
+        write_data.close()
+
 def Command8(UserVoiceInput):
         importlib.reload(import_alarms)
         currentHour=int(time.strftime("%I"))
