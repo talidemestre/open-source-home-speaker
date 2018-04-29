@@ -12,8 +12,12 @@ while True:
     if len(import_alarms.alarms_list) >0:
             for i in (0, len(import_alarms.alarms_list)-1):
                 for x in (0, len(import_alarms.alarms_list[i])):
-                    if import_alarms.alarms_list[i][2] == 'AM': 
+                    #Below I have to include AM and PM in the primary fi statements due to the nature that the time module accounts that AM and PM are not the same worldwide.
+                    if import_alarms.alarms_list[i][2] == 'AM' or int(time.strftime("%H")) ==12:#Use when it is an AM hout or 12pm 
                         if int(time.strftime("%H"))==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]: #Checking if Alarms on the AM are in the current hour and minute
+                            print("alarm is sounding")
+                    elif int(time.strftime("%H")) ==0:
+                        if int(time.strftime("%H"))==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:
                             print("alarm is sounding")
                     else:
                         if int(time.strftime("%H")) - 12 ==import_alarms.alarms_list[i][0] and int(time.strftime("%M"))==import_alarms.alarms_list[i][1]:#Checking if Alarms on the PM are in the current hour and minute
