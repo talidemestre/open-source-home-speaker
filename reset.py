@@ -38,5 +38,5 @@ write_data.write("alarms_list=[]")
 write_data.close()
 
 write_data = open('import_lists.py', 'w')
-write_data.write("lists=[]")
+write_data.write("lists=[['notes']]")
 write_data.close()
