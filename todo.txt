@@ -1,7 +1,5 @@
 VOICE ACTIVATION
 TEXT TO SPEECH
-creating lists
-note taking
 spotify integration
 GUI
 
