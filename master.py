@@ -6,6 +6,13 @@ import import_alarms
 import import_perma_alarms
 import import_lists
 
+#music search
+import pafy
+import vlc
+import urllib.request
+import urllib.parse
+import re
+
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
@@ -14,12 +21,48 @@ CommandFourWords = ["whats", "on", "schedule", "calendar"]
 CommandFiveWords = ["take", "write", "note"]
 CommandSixWords = ["make", "list", "create", "named", "called", "titled"]
 CommandSevenWords = ["add", "to", "list", "write"]
-CommandEightWords = ["cancel", "alarm", "music", "stop", "pause","cease","end","terminate","conclude","finish","desist"]
+CommandEightWords = ["cancel", "alarm", "music", "stop", "cease","end","terminate","conclude","finish","desist"]
+CommandNineWords = ["pause", "unpause", "music", "song"]
 
-
-##--Placeholder Functions For Each Function--##
+##--Main Functions--##
 def Command1(UserVoiceInput):
-        print ("Attempting to play music...")
+        search_term= ''
+        found_song = False
+
+        #extracts everything after either the first 'play' or first 'song'
+        for i in VoiceArray:
+            if found_song == True:
+                search_term = search_term +' ' + i
+            else:
+                if i == 'song' or i =='play':
+                    found_song = True
+
+
+        #searches for user song, credit of Grant Curell https://www.codeproject.com/Articles/873060/Python-Search-Youtube-for-Video
+        query_string = urllib.parse.urlencode({"search_query" : search_term + 'song'}) #'song' added to end to lower chance of non-song results
+        html_content = urllib.request.urlopen("http://www.youtube.com/results?" + query_string)
+        search_results = re.findall(r'href=\"\/watch\?v=(.{11})', html_content.read().decode())
+        url = "http://www.youtube.com/watch?v=" + search_results[0]
+
+        print(url)
+
+        #extracts audio from selected song's youtbe video
+        video = pafy.new(url)
+        best = video.getbestaudio()
+        playurl = best.url
+
+
+        #plays selected song in vlc
+        Instance = vlc.Instance()
+        global player
+        player = Instance.media_player_new()
+        Media = Instance.media_new(playurl)
+        Media.get_mrl()
+        player.set_media(Media)
+        player.play()
+
+        return (player)
+
 def Command2(UserVoiceInput):
         importlib.reload(import_alarms)
         importlib.reload(import_perma_alarms)
@@ -270,7 +313,9 @@ def Command8(UserVoiceInput):
         write_data = open('import_alarms.py', 'w')
         write_data.write("alarms_list=" + str(import_alarms.alarms_list))
         write_data.close()
-        
+def Command9(UserVoiceInput):
+        player.pause()
+
 def Search (UserVoiceInput):
         print("I ran a search for " + UserVoiceInput +":")
         search=pypygo.query(UserVoiceInput)
@@ -285,7 +330,8 @@ while True:
         CommandSixCount = 0
         CommandSevenCount = 0
         CommandEightCount = 0
-
+        CommandNineCount = 0
+        
         #UserVoiceInput = "Hey google, set an alarm for four thirty"
         UserVoiceInput = input() #placeholder voice-interpreted text
         UserVoiceInput = UserVoiceInput.lower()
@@ -319,10 +365,12 @@ while True:
             for x in range (0, len(CommandEightWords)):
                 if VoiceArray[i] == CommandEightWords[x]:
                     CommandEightCount+=1
-
+            for x in range (0, len(CommandNineWords)):
+                if VoiceArray[i] == CommandNineWords[x]:
+                    CommandNineCount+=1
 
         ##--Command with most matches is called--##
-        Counts = [CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
+        Counts = [CommandNineCount,CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
 
         Maximum=max(Counts)
         if Maximum == 0:
@@ -343,6 +391,8 @@ while True:
             Command7(UserVoiceInput)
         elif CommandEightCount== Maximum:
             Command8(UserVoiceInput)
+        elif CommandNineCount== Maximum:
+            Command9(UserVoiceInput)
         else:
                 Search(UserVoiceInput)
         
