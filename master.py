@@ -24,8 +24,14 @@ CommandSevenWords = ["add", "to", "list", "write"]
 CommandEightWords = ["cancel", "alarm", "music", "stop", "cease","end","terminate","conclude","finish","desist"]
 CommandNineWords = ["pause", "unpause", "music", "song"]
 
+#initialize player here, so music doesnt stack
+Instance = vlc.Instance()
+global player
+player = Instance.media_player_new()
+
 ##--Main Functions--##
 def Command1(UserVoiceInput):
+        player.stop()
         search_term= ''
         found_song = False
 
@@ -60,8 +66,6 @@ def Command1(UserVoiceInput):
         Media.get_mrl()
         player.set_media(Media)
         player.play()
-
-        return (player)
 
 def Command2(UserVoiceInput):
         importlib.reload(import_alarms)
