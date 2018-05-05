@@ -1,10 +1,7 @@
+-fix search
+
 VOICE ACTIVATION
 TEXT TO SPEECH
-spotify integration
-	https://pyspotify.mopidy.com/en/latest/installation/  --docs
-	https://github.com/mopidy/pyspotify
-	https://beta.developer.spotify.com/dashboard/applications/5838af787fd946bd9849003e7ebfe82f  -- Developers Page
-
 GUI
 
 TEST
