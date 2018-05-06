@@ -44,7 +44,7 @@ player = Instance.media_player_new()
 ##--Core Functions--##
 def DisplayAndSay(text):
         print(text)
-        engine.say(text)
+        engine.say(text)        #vocalizes and displays the text
         engine.runAndWait()
 
 ##--Command Functions--##
@@ -108,12 +108,15 @@ def Command2(UserVoiceInput):
         
         for word in range(0, len(VoiceArray)):
             print (VoiceArray[word])
+            #determine if alarm is to be permanent or one-time
             if VoiceArray[word] == 'permanent' or VoiceArray[word]=='perma':
                 permanent = True
-            if VoiceArray[word] == 'am':#
-                AMorPM ="AM"#
-            if VoiceArray[word] == 'pm':#The voice detection will likely not read these as AM or PM and as such they should be updated.
-                AMorPM ="PM" #               
+            #checks if AM or PM time
+            if VoiceArray[word] == 'am':
+                AMorPM ="AM"
+            if VoiceArray[word] == 'pm':
+                AMorPM ="PM"
+            #if hour word is not found set hour, otherwise search for minutes
             if hour_detected == False:
                 for i in range (0, len(hourList)):
                     if VoiceArray[word] == hourList[i]:
@@ -121,13 +124,13 @@ def Command2(UserVoiceInput):
                         finalHour = i+1              
             else:
                 for i in range (0, len(minutePrefix)):
-                    if VoiceArray[word] == minutePrefix[i]:
+                    if VoiceArray[word] == minutePrefix[i]: #find prefix for minute, e.g. twenty,thirty,fifty
                         finalMinute+= 10*((i+2))
                 for i in range (0, len(minuteSuffix)):
-                    if VoiceArray[word] == minuteSuffix[i]:
+                    if VoiceArray[word] == minuteSuffix[i]: #find suffix of minute, e.g. one, two, nine
                         finalMinute += i+1
                 for i in range (0, len(minuteMono)):
-                    if VoiceArray[word] == minuteMono[i]:
+                    if VoiceArray[word] == minuteMono[i]: #find a mono minute, e.g. ten, twelve, nineteen
                         finalMinute = i + 10
 
         alarm= [finalHour, finalMinute, AMorPM]
@@ -139,6 +142,7 @@ def Command2(UserVoiceInput):
         write_data.write("alarms_list=" + str(import_alarms.alarms_list))
         write_data.close()
 
+        #add (or dont) to permanent alarm list
         if permanent == True:
                 import_perma_alarms.alarms_list.append(alarm)
                 write_data = open('import_perma_alarms.py', 'w')
@@ -155,7 +159,6 @@ def Command3(UserVoiceInput):
         finalMonth = int(time.strftime("%m"))
         finalDay=int(time.strftime("%d"))+1
         finalYear=int(time.strftime("%Y"))
-        #print (testDate)
 
 
         ###ADD THIRTIETH
