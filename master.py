@@ -16,7 +16,7 @@ import re
 #speech to text
 import speech_recognition as sr
 r = sr.Recognizer()
-
+WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
@@ -27,7 +27,7 @@ CommandFiveWords = ["take", "write", "note"]
 CommandSixWords = ["make", "list", "create", "named", "called", "titled"]
 CommandSevenWords = ["add", "to", "list", "write"]
 CommandEightWords = ["cancel", "alarm", "music", "stop", "cease","end","terminate","conclude","finish","desist"]
-CommandNineWords = ["pause", "unpause", "music", "song"]
+CommandNineWords = ["pause", "unpause", "music", "Stop", "song"]
 
 #initialize player here, so music doesnt stack
 Instance = vlc.Instance()
@@ -341,13 +341,13 @@ while True:
         CommandEightCount = 0
         CommandNineCount = 0
         
-        #UserVoiceInput = "Hey google, set an alarm for four thirty"
+
         next = input('hit enter for input')
         with sr.Microphone() as source:
                 print("Say something!")
                 audio = r.listen(source)
 
-        UserVoiceInput = r.recognize_google(audio)
+        UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
         print(UserVoiceInput)
         #UserVoiceInput = input() #placeholder voice-interpreted text
         UserVoiceInput = UserVoiceInput.lower()
