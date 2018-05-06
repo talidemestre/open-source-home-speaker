@@ -13,6 +13,11 @@ import urllib.request
 import urllib.parse
 import re
 
+#speech to text
+import speech_recognition as sr
+r = sr.Recognizer()
+
+
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
@@ -31,7 +36,7 @@ player = Instance.media_player_new()
 
 ##--Main Functions--##
 def Command1(UserVoiceInput):
-        player.stop()
+        player.stop() #stops any currently palying tracks before starting a new one
         search_term= ''
         found_song = False
 
@@ -337,7 +342,14 @@ while True:
         CommandNineCount = 0
         
         #UserVoiceInput = "Hey google, set an alarm for four thirty"
-        UserVoiceInput = input() #placeholder voice-interpreted text
+        next = input('hit enter for input')
+        with sr.Microphone() as source:
+                print("Say something!")
+                audio = r.listen(source)
+
+        UserVoiceInput = r.recognize_google(audio)
+        print(UserVoiceInput)
+        #UserVoiceInput = input() #placeholder voice-interpreted text
         UserVoiceInput = UserVoiceInput.lower()
         VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
 
