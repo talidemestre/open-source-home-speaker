@@ -18,6 +18,13 @@ import speech_recognition as sr
 r = sr.Recognizer()
 WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 
+#text to speech
+import pyttsx3
+engine = pyttsx3.init()
+engine.say('Welcome to the TOMMY voice assistant. Press enter to get started.')
+engine.runAndWait()
+
+
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
