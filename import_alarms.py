@@ -1,1 +1,1 @@
-alarms_list=[[0, 0, 'PM'], [0, 0, 'PM'], [0, 0, 'PM']]
+alarms_list=[]
