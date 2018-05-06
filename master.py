@@ -21,8 +21,7 @@ WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 #text to speech
 import pyttsx3
 engine = pyttsx3.init()
-engine.say('Welcome to the TOMMY voice assistant. Press enter to get started.')
-engine.runAndWait()
+
 
 
 ##--Trigger Words For Each Command--##
@@ -41,7 +40,14 @@ Instance = vlc.Instance()
 global player
 player = Instance.media_player_new()
 
-##--Main Functions--##
+
+##--Core Functions--##
+def DisplayAndSay(text):
+        print(text)
+        engine.say(text)
+        engine.runAndWait()
+
+##--Command Functions--##
 def Command1(UserVoiceInput):
         player.stop() #stops any currently palying tracks before starting a new one
         search_term= ''
@@ -77,6 +83,7 @@ def Command1(UserVoiceInput):
         Media = Instance.media_new(playurl)
         Media.get_mrl()
         player.set_media(Media)
+        DisplayAndSay("Playing " + video.title + ".")
         player.play()
 
 def Command2(UserVoiceInput):
@@ -86,7 +93,7 @@ def Command2(UserVoiceInput):
         hourList = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
         minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
-        minutePrefix =['twenty','thirty','fourty','fifty']
+        minutePrefix =['twenty','thirty','forty','fifty']
         minuteSuffix =['one', 'two', 'three', 'four', 'five', "six", "seven", "eight", "nine"]
 
         finalHour=0
@@ -127,6 +134,7 @@ def Command2(UserVoiceInput):
 
         import_alarms.alarms_list.append(alarm)
 
+        
         write_data = open('import_alarms.py', 'w')
         write_data.write("alarms_list=" + str(import_alarms.alarms_list))
         write_data.close()
@@ -136,6 +144,9 @@ def Command2(UserVoiceInput):
                 write_data = open('import_perma_alarms.py', 'w')
                 write_data.write("alarms_list=" + str(import_perma_alarms.alarms_list))
                 write_data.close()
+                DisplayAndSay("Permanent alarm set for " + str(finalHour) + " " + str(finalMinute) + " " + str(AMorPM))
+        else:
+                DisplayAndSay("Alarm set for " + str(finalHour) + " " + str(finalMinute) + " " + str(AMorPM))
 #COMMAND THAT SETS DATES        
 def Command3(UserVoiceInput):
         importlib.reload(import_calendar)
@@ -201,6 +212,7 @@ def Command3(UserVoiceInput):
         write_data = open('import_calendar.py', 'w')
         write_data.write("creationYear=" + str(import_calendar.creationYear) + "\nyears =" + str(import_calendar.years))
         write_data.close()
+        DisplayAndSay("Event set for " + str(finalDay+1) + " " + monthList[finalMonth] + " " + str(finalYear))
 
 ##COMMAND THAT GATHERS EVENTS ON CALENDAR        
 def Command4(UserVoiceInput):
@@ -218,17 +230,17 @@ def Command4(UserVoiceInput):
         if (day_range + arrayDay <= len(import_calendar.years[arrayYear][arrayMonth])):
             for i in range(arrayDay, arrayDay+day_range):
                 print( str(arrayMonth) +" " +  str(i+1))
-                print(import_calendar.years[arrayYear][arrayMonth][i])
+                DisplayAndSay(import_calendar.years[arrayYear][arrayMonth][i])
         else:
             for i in range(arrayDay, arrayDay + (len(import_calendar.years[arrayYear][arrayMonth]) - arrayDay)):
                 print( str(arrayMonth) +" " +  str(i+1))
-                print(import_calendar.years[arrayYear][arrayMonth][i])
+                DisplayAndSay(import_calendar.years[arrayYear][arrayMonth][i])
 
 
                 
             for i in range(0, day_range - (len(import_calendar.years[arrayYear][arrayMonth]) - arrayDay)):
                 print( str(arrayMonth+1) +" " +  str(i+1))
-                print(import_calendar.years[arrayYear][arrayMonth + 1][i])
+                DisplayAndSay(import_calendar.years[arrayYear][arrayMonth + 1][i])
         
 def Command5(UserVoiceInput):
         importlib.reload(import_lists)
@@ -243,11 +255,10 @@ def Command5(UserVoiceInput):
                 note_found = True
 
         import_lists.lists[0].append(string_add)
-
         write_data = open('import_lists.py', 'w')
         write_data.write("lists=" +str(import_lists.lists))
         write_data.close()
-
+        DisplayAndSay("Note: '" + string_add + "', added to list.")
 def Command6(UserVoiceInput):
         importlib.reload(import_lists)
         synonyms = ["list", "named", "called", "titled", "dubbed", "labelled", "termed", "christened", "denominated", "termed", "styled", "identified", "entititled", "termed"] #these are all synonyms for 'named' so that the program can determine what to name the list
@@ -272,17 +283,18 @@ def Command6(UserVoiceInput):
 
         dupe_found = False#tests if title is duplicate of existing title
         for i in import_lists.lists:
-            if i[0] == title:
-                dupe_found = True
+                if i[0] == title:
+                        dupe_found = True
                 
         if dupe_found == False:        
-            import_lists.lists.append(new_list)
+                import_lists.lists.append(new_list)
 
-            write_data = open('import_lists.py', 'w')
-            write_data.write("lists=" +str(import_lists.lists))
-            write_data.close()
+                write_data = open('import_lists.py', 'w')
+                write_data.write("lists=" +str(import_lists.lists))
+                write_data.close()
+                DisplayAndSay("List titled, '" + title + "' successfully created.")
         else:
-            print("You already have a list titled with that.")    
+                DisplayAndSay("You already have a list titled '" + title +"'.")    
 
 def Command7(UserVoiceInput):
         importlib.reload(import_lists)
@@ -299,12 +311,19 @@ def Command7(UserVoiceInput):
                         title_found = True#ends matching attempts
                         list_found=x#index of list
 
+                        
+        if list_found == 0:
+                DisplayAndSay("Could not find specified list.")
+        else:
+                DisplayAndSay("Adding: '" + string_add + "' to list '" +  import_lists.lists[list_found][0] +"'.")
                     
-        import_lists.lists[list_found].append(string_add)
+                import_lists.lists[list_found].append(string_add)
 
-        write_data = open('import_lists.py', 'w')
-        write_data.write("lists=" +str(import_lists.lists))
-        write_data.close()
+                write_data = open('import_lists.py', 'w')
+                write_data.write("lists=" +str(import_lists.lists))
+                write_data.close()
+        
+
 
 def Command8(UserVoiceInput):
         importlib.reload(import_alarms)
@@ -333,9 +352,12 @@ def Command9(UserVoiceInput):
         player.pause()
 
 def Search (UserVoiceInput):
-        print("I ran a search for " + UserVoiceInput +":")
+        DisplayAndSay("I ran a search for " + UserVoiceInput +":")
         search=pypygo.query(UserVoiceInput)
-        print(search.abstract)
+        DisplayAndSay(search.abstract)
+
+
+DisplayAndSay('Welcome to the TOMMY voice assistant. Press enter to get started.')
 while True:
         ##--Total Matched Words with Trigger Words--##
         CommandOneCount = 0
