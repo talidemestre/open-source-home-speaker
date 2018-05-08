@@ -7,9 +7,12 @@ import import_perma_alarms
 import import_lists
 import import_calendar
 import importlib
+from functools import partial #https://www.daniweb.com/programming/software-development/threads/410335/for-loop-for-creating-buttons
+#z
 
 LARGE_FONT= ("Verdana", 12)
 
+deletion_array=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 
 class Pages(tk.Tk):
 
@@ -60,8 +63,8 @@ class Main(tk.Frame):
                                 command=lambda: controller.show_frame(Demo))
         demo_button.pack( )
 
-        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
-                                command=lambda: controller.show_frame(Main))
+        back_button = tk.Button(self,width=10,  text="Quit", fg="black", bg="green",
+                                command=lambda: exit())
         back_button.pack( side = tk.BOTTOM )
 
 class Settings(tk.Frame):
@@ -87,7 +90,11 @@ class Settings(tk.Frame):
         alarm_frame = tk.Frame(self)
         alarm_frame.pack()
         for Alarm in import_alarms.alarms_list:
-            button =tk.Button(alarm_frame, width =10, text = str(Alarm[0])+':' + str(Alarm[1]) + " " + str(Alarm[2]))
+            button =tk.Button(alarm_frame, width =10, text = str(Alarm[0])+':' + str(Alarm[1]) + " " + str(Alarm[2]),
+                              command = lambda:(
+                                                import_alarms.alarms_list.remove(Alarm),
+                                                button.pack_forget()
+                                                ))
             button.pack(side = tk.LEFT)
 
         perma_label = tk.Label(self, width=15, text="Permanent Alarms",  fg="Blue")
