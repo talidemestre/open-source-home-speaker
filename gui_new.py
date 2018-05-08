@@ -3,6 +3,7 @@
 import tkinter as tk
 
 import import_alarms
+import import_perma_alarms
 import import_lists
 import import_calendar
 import importlib
@@ -45,7 +46,7 @@ class Main(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         label = tk.Label(self, text="T.O.M.M.Y Voice Assistant", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        label.pack(pady=8,padx=10)
         
         config_button = tk.Button(self,width=10,  text="Config",fg="red",
                               command=lambda: controller.show_frame(Settings))
@@ -55,10 +56,11 @@ class Main(tk.Frame):
                                 command=lambda: print("executing"))
         run_button.pack()
 
-        demo_button = tk.Button(self,width=10,  text="Demo", fg="blue")
+        demo_button = tk.Button(self,width=10,  text="Demo", fg="blue",
+                                command=lambda: controller.show_frame(Demo))
         demo_button.pack( )
 
-        back_button = tk.Button(self,width=10,  text="Back", fg="black",
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                                 command=lambda: controller.show_frame(Main))
         back_button.pack( side = tk.BOTTOM )
 
@@ -67,13 +69,36 @@ class Settings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Settings", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        label.pack(pady=8,padx=10)
 
-        redbutton = tk.Button(self, width=10, text="Lists",  command=Settings, fg="red")
+        redbutton = tk.Label(self, width=10, text="Lists",  fg="red")
         redbutton.pack()
 
-        greenbutton = tk.Button(self,width=10,  text="Alarms", fg="brown")
+        list_frame = tk.Frame(self)
+        list_frame.pack()
+        for List in import_lists.lists:
+            button =tk.Button(list_frame, width =10, text = List[0])
+            button.pack(side = tk.LEFT)
+            
+
+        greenbutton = tk.Label(self,width=10,  text="Alarms", fg="brown")
         greenbutton.pack()
+        
+        alarm_frame = tk.Frame(self)
+        alarm_frame.pack()
+        for Alarm in import_alarms.alarms_list:
+            button =tk.Button(alarm_frame, width =10, text = str(Alarm[0])+':' + str(Alarm[1]) + " " + str(Alarm[2]))
+            button.pack(side = tk.LEFT)
+
+        perma_label = tk.Label(self, width=15, text="Permanent Alarms",  fg="Blue")
+        perma_label.pack()
+
+        perma_alarm_frame = tk.Frame(self)
+        perma_alarm_frame.pack()        
+        for Alarm in import_perma_alarms.alarms_list:
+            button =tk.Button(perma_alarm_frame, width =10, text = str(Alarm[0])+':' + str(Alarm[1]) + " " + str(Alarm[2]))
+            button.pack(side = tk.LEFT)
+
 
         volume_label =tk.Label(self, text="Volume")
         volume_label.pack()
@@ -85,15 +110,18 @@ class Settings(tk.Frame):
         voice_label.pack()
         
         voice_synth=''
+
+        radio_frame = tk.Frame(self)
+        radio_frame.pack()
         
-        R1 = tk.Radiobutton(self, text="Male", variable=voice_synth, value=1)
+        R1 = tk.Radiobutton(radio_frame, text="Male", variable=voice_synth, value=1)
         R1.pack(anchor=tk.W)
 
-        R2 = tk.Radiobutton(self, text="Female", variable=voice_synth, value=2)
+        R2 = tk.Radiobutton(radio_frame, text="Female", variable=voice_synth, value=2)
         R2.pack(anchor=tk.W)
 
         
-        back_button = tk.Button(self,width=10,  text="Back", fg="black",
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                                 command=lambda: controller.show_frame(Main))
         back_button.pack( side = tk.BOTTOM )
 
@@ -101,8 +129,8 @@ class Demo(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        label = tk.Label(self, text="Demo", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
 
         button1 = tk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(Main))
