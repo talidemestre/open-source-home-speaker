@@ -12,6 +12,21 @@ from functools import partial #https://www.daniweb.com/programming/software-deve
 
 LARGE_FONT= ("Verdana", 12)
 
+def WriteAlarm(alarms_list):
+        write_data = open('import_alarms.py', 'w')
+        write_data.write("alarms_list=" + str(alarms_list))
+        write_data.close()
+        
+def WritePermaAlarm(alarms_list):
+        write_data = open('import_perma_alarms.py', 'w')
+        write_data.write("alarms_list=" + str(alarms_list))
+        write_data.close()
+
+def WriteList(lists):
+        write_data = open('import_lists.py', 'w')
+        write_data.write("lists=" +str(import_lists.lists))
+        write_data.close()        
+        
 class Pages(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -80,9 +95,10 @@ class Settings(tk.Frame):
         list_frame = tk.Frame(self)
         list_frame.pack()
         for List in import_lists.lists:
-            button =tk.Button(list_frame, width =10, text = List[0],
-                              command=lambda: print(button.config('text')[-1]))
-            button.pack(side = tk.LEFT)
+            if List[0]!='notes':
+                button =tk.Button(list_frame, width =10, text = List[0])
+                button['command'] = lambda x=List, y=button: (import_lists.lists.remove(x), y.pack_forget(), self.update(), WriteList(import_lists.lists))
+                button.pack(side = tk.LEFT)
            
 
 
@@ -96,14 +112,14 @@ class Settings(tk.Frame):
         button_array=['','','','','','','','','','','','','','','','','','',]
         alarm_frame = tk.Frame(self)
         alarm_frame.pack()
-        for Alarm in range(0, len(import_alarms.alarms_list)):
-            button_array[Alarm] =tk.Button(alarm_frame, width =10, text = str(import_alarms.alarms_list[Alarm][0])+':' + str(import_alarms.alarms_list[Alarm][1]) + " " + str(import_alarms.alarms_list[Alarm][2]),
-                              command = lambda:(
-                                                import_alarms.alarms_list.remove(Alarm),
-                                                button_array[Alarm].pack_forget(),
-                                                self.update()
-                                                ))
-            button_array[Alarm].pack(side = tk.LEFT)
+        for Alarm in import_alarms.alarms_list:
+            alarm_button =tk.Button(alarm_frame, width =10, text = Alarm)
+            alarm_button['command'] = lambda x=Alarm, y=alarm_button:( import_alarms.alarms_list.remove(x),
+                                                y.pack_forget(),
+                                                self.update(),
+                                                WriteAlarm(import_alarms.alarms_list)
+                                                )
+            alarm_button.pack(side = tk.LEFT)
 
 
 
@@ -115,7 +131,12 @@ class Settings(tk.Frame):
         perma_alarm_frame = tk.Frame(self)
         perma_alarm_frame.pack()        
         for Alarm in import_perma_alarms.alarms_list:
-            perma_button =tk.Button(perma_alarm_frame, width =10, text = str(Alarm[0])+':' + str(Alarm[1]) + " " + str(Alarm[2]))
+            perma_button =tk.Button(perma_alarm_frame, width=10, text = Alarm)
+            perma_button['command'] = lambda x=Alarm, y=perma_button:( import_perma_alarms.alarms_list.remove(x),
+                                                y.pack_forget(),
+                                                self.update(),
+                                                WritePermaAlarm(import_perma_alarms.alarms_list)
+                                                )
             perma_button.pack(side = tk.LEFT)
 
 
