@@ -7,8 +7,8 @@ import import_perma_alarms
 import import_lists
 import import_calendar
 import importlib
-from functools import partial #https://www.daniweb.com/programming/software-development/threads/410335/for-loop-for-creating-buttons
-#z
+import os
+
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -66,15 +66,15 @@ class Main(tk.Frame):
         
         config_button = tk.Button(self,width=10,  text="Config",fg="red",
                               command=lambda: controller.show_frame(Settings))
-        config_button.pack()
+        config_button.pack(pady=25)
 
-        run_button = tk.Button(self,width=10,  text="Run Assistant", fg="brown",
+        run_button = tk.Button(self,width=10,  text="Run Assistant", fg="brown", 
                                 command=lambda: print("executing"))
-        run_button.pack()
+        run_button.pack(pady=25)
 
         demo_button = tk.Button(self,width=10,  text="Demo", fg="blue",
                                 command=lambda: controller.show_frame(Demo))
-        demo_button.pack( )
+        demo_button.pack(pady=25)
 
         back_button = tk.Button(self,width=10,  text="Quit", fg="black", bg="green",
                                 command=lambda: exit())
@@ -143,7 +143,9 @@ class Settings(tk.Frame):
         volume_label =tk.Label(self, text="Volume")
         volume_label.pack()
         
-        volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0, )
+        volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
+        volume_bar.set(os.system('sudo amixer cget numid=3'))  #doesn't work on windows   
+        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer cset numid=3 " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
         voice_label =tk.Label(self, text="Voice Type")
