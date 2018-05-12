@@ -345,7 +345,7 @@ def Command8(UserVoiceInput):
                     if import_alarms.alarms_list[i][2] == currentFormat:
                          import_alarms.alarms_list.remove([currentHour, currentMinute, currentFormat])
 
-
+        DisplayAndSay("Alarm cancelled.")
         print([currentHour, currentMinute, currentFormat])
         print (import_alarms.alarms_list)                         
         write_data = open('import_alarms.py', 'w')
