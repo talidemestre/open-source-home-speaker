@@ -13,10 +13,17 @@ import os
 LARGE_FONT= ("Verdana", 12)
 
 #####NEW MASTER
+#importing search
 import pypygo
+import wikipedia
+import wolframalpha
+client = wolframalpha.Client('8VTX85-9AA7GU7T3T')
+
 import time
-import import_calendar
 import importlib
+
+#importing external files
+import import_calendar
 import import_alarms
 import import_perma_alarms
 import import_lists
@@ -50,6 +57,7 @@ CommandSixWords = ["make", "list", "create", "named", "called", "titled"]
 CommandSevenWords = ["add", "to", "list", "write"]
 CommandEightWords = ["cancel", "alarm", "music", "stop", "cease","end","terminate","conclude","finish","desist"]
 CommandNineWords = ["pause", "unpause", "music", "Stop", "song"]
+CommandTenWords = ["who", "when", "where", "why"]
 
 #initialize player here, so music doesnt stack
 Instance = vlc.Instance()
@@ -61,6 +69,7 @@ player.play()
 ##--Core Functions--##
 def DisplayAndSay(text):
         print(text)
+        out_text.configure(text=text)
         engine.say(text)        #vocalizes and displays the text
         engine.runAndWait()
 
@@ -379,11 +388,37 @@ def Command8(UserVoiceInput):
 def Command9(UserVoiceInput):
         player.pause()
 
-def Search (UserVoiceInput):
-        DisplayAndSay("I ran a search for " + UserVoiceInput +":")
-        search=pypygo.query(UserVoiceInput)
-        DisplayAndSay(search.abstract)
+def WikiSearch (UserVoiceInput):
+        try:
+                DisplayAndSay(wikipedia.summary(UserVoiceInput, sentences=2))
+        except:
+                try:
+                        print(wikipedia.search(UserVoiceInput,results=2))
+                        DisplayAndSay(wikipedia.page(title =wikipedia.search(UserVoiceInput,results=2)[1]).summary(sentences=2))
+                except:
+                        DisplayAndSay("Umm. Something went wrong.")
 
+def Search (UserVoiceInput):
+        temp_process_math = UserVoiceInput.split()
+        re_string = ''
+        for i in temp_process_math:
+                add=i
+                print(i)
+                if i == 'square':
+                        add='squared'     #Wit AI often hears 'squared' as 'square; which causes it be a little shit. Hopefully this fixes that.
+                re_string = re_string + add
+                re_string = re_string + ' '
+                print(re_string)
+        res = client.query(re_string)
+        print(res['@success'])
+        print(res)
+        if res['@success'] == 'false':
+             WikiSearch(UserVoiceInput)
+        else:
+            try:
+                DisplayAndSay(next(res.results).text)
+            except:
+                WikiSearch(UserVoiceInput)
         
 ####MAIN LOOP###
 def MainLine():
@@ -399,16 +434,17 @@ def MainLine():
     CommandSevenCount = 0
     CommandEightCount = 0
     CommandNineCount = 0
+    CommandTenCount = 0
     
 
     #next = input('hit enter for input')
     with sr.Microphone() as source:
             print("Say something!")
-            r.adjust_for_ambient_noise(source)
-            audio = r.listen(source,timeout=1,phrase_time_limit=6)
+            #r.adjust_for_ambient_noise(source)
+            #audio = r.listen(source,timeout=1,phrase_time_limit=6)
     print("processing...")
-    UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
-    #UserVoiceInput = input("debug manual input: ")
+    #UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
+    UserVoiceInput = input("debug manual input: ")
     print(UserVoiceInput)
     #UserVoiceInput = input() #placeholder voice-interpreted text
     UserVoiceInput = UserVoiceInput.lower()
@@ -470,6 +506,8 @@ def MainLine():
         Command8(UserVoiceInput)
     elif CommandNineCount== Maximum:
         Command9(UserVoiceInput)
+    elif CommandTenCount== Maximum:
+        WikiSearch(UserVoiceInput)
     else:
             Search(UserVoiceInput)
         
@@ -719,6 +757,11 @@ class ShellTom(tk.Frame):
         button2 = tk.Button(self, width = 20, height=5, text="Ask Question",
                             command=lambda: MainLine())
         button2.pack()
+
+
+        global out_text #lets TOMMY display what he is saying
+        out_text = tk.Label(self, text="")
+        out_text.pack()
 
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
