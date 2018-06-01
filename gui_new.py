@@ -9,6 +9,7 @@ import import_calendar
 import importlib
 import os
 
+import wikipedia
 
 LARGE_FONT= ("Verdana", 12)
 

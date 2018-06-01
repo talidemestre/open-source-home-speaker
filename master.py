@@ -13,6 +13,7 @@ import urllib.request
 import urllib.parse
 import re
 
+
 #speech to text
 import speech_recognition as sr
 r = sr.Recognizer()
@@ -39,6 +40,7 @@ CommandNineWords = ["pause", "unpause", "music", "Stop", "song"]
 Instance = vlc.Instance()
 global player
 player = Instance.media_player_new()
+player.play()
 
 
 ##--Core Functions--##
@@ -49,6 +51,7 @@ def DisplayAndSay(text):
 
 ##--Command Functions--##
 def Command1(UserVoiceInput):
+        global player
         player.stop() #stops any currently palying tracks before starting a new one
         search_term= ''
         found_song = False
@@ -78,7 +81,6 @@ def Command1(UserVoiceInput):
 
         #plays selected song in vlc
         Instance = vlc.Instance()
-        global player
         player = Instance.media_player_new()
         Media = Instance.media_new(playurl)
         Media.get_mrl()
@@ -377,9 +379,11 @@ while True:
         next = input('hit enter for input')
         with sr.Microphone() as source:
                 print("Say something!")
-                audio = r.listen(source)
-
+                r.adjust_for_ambient_noise(source)
+                audio = r.listen(source,timeout=1,phrase_time_limit=6)
+        print("processing...")
         UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
+        #UserVoiceInput = input("debug manual input: ")
         print(UserVoiceInput)
         #UserVoiceInput = input() #placeholder voice-interpreted text
         UserVoiceInput = UserVoiceInput.lower()

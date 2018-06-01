@@ -2,10 +2,9 @@
 # License: http://creativecommons.org/licenses/by-sa/3.0/	
 import tkinter as tk
 
-import import_alarms
-import import_perma_alarms
-import import_lists
-import import_calendar
+
+
+
 import importlib
 import os
 
@@ -682,7 +681,7 @@ class Demo(tk.Frame):
         step_1 = tk.Label(self, width=80, text="There are many commands you can utlise in the TOMMY Voice Assistant.",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="To utilise these commands, first press the 'Run Assistant' button on the home screen. ",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="To utilise these commands, first tap the 'Run Assistant' button on the home screen. ",  fg="Blue")
         step_2.pack()
 
         button_left = tk.Button(self, text="Back",state =tk.DISABLED)
@@ -691,6 +690,14 @@ class Demo(tk.Frame):
         button2 = tk.Button(self, text="Next",
                             command=lambda: controller.show_frame(Demo2))
         button2.pack(side = tk.RIGHT)
+
+        ##importing images
+        self.step1 = tk.PhotoImage(file="step1.gif")
+
+        image = tk.Label(self, image = self.step1)
+        image.image = self.step1
+        image.pack()    
+
         
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
@@ -703,10 +710,10 @@ class Demo2(tk.Frame):
         label = tk.Label(self, text="Step 2", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="Next you will want to press the 'Ask Question' centered on the screen.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Next you will want to tap the 'Ask Question' centered on the screen.",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="Speak into the microphone.",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="Speak your request into the microphone.",  fg="Blue")
         step_2.pack()
 
         button_left = tk.Button(self, text="Back",
@@ -717,6 +724,13 @@ class Demo2(tk.Frame):
         button2 = tk.Button(self, text="Next",
                             command=lambda: controller.show_frame(Demo3))
         button2.pack(side=tk.RIGHT)
+
+        self.step2 = tk.PhotoImage(file="step2.gif")
+
+        image = tk.Label(self, image = self.step2)
+        image.image = self.step2
+        image.pack()    
+
         
         
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
@@ -743,6 +757,14 @@ class Demo3(tk.Frame):
 
         button2 = tk.Button(self, text="Next", state = tk.DISABLED)
         button2.pack(side=tk.RIGHT)
+
+
+        self.step3 = tk.PhotoImage(file="step3.gif")
+
+        image = tk.Label(self, image = self.step3)
+        image.image = self.step3
+        image.pack()    
+
         
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
