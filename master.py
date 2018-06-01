@@ -1,7 +1,28 @@
-import pypygo
-import time
-import import_calendar
+# My code for switching between menus was derived from: http://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
+# License: http://creativecommons.org/licenses/by-sa/3.0/	
+import tkinter as tk
+
+
+
+
 import importlib
+import os
+
+
+LARGE_FONT= ("Verdana", 12)
+
+#####NEW MASTER
+#importing search
+import pypygo
+import wikipedia
+import wolframalpha
+client = wolframalpha.Client('8VTX85-9AA7GU7T3T')
+
+import time
+import importlib
+
+#importing external files
+import import_calendar
 import import_alarms
 import import_perma_alarms
 import import_lists
@@ -35,6 +56,7 @@ CommandSixWords = ["make", "list", "create", "named", "called", "titled"]
 CommandSevenWords = ["add", "to", "list", "write"]
 CommandEightWords = ["cancel", "alarm", "music", "stop", "cease","end","terminate","conclude","finish","desist"]
 CommandNineWords = ["pause", "unpause", "music", "Stop", "song"]
+CommandTenWords = ["who", "when", "where", "why"]
 
 #initialize player here, so music doesnt stack
 Instance = vlc.Instance()
@@ -46,6 +68,7 @@ player.play()
 ##--Core Functions--##
 def DisplayAndSay(text):
         print(text)
+        out_text.configure(text=text)
         engine.say(text)        #vocalizes and displays the text
         engine.runAndWait()
 
@@ -55,8 +78,9 @@ def Command1(UserVoiceInput):
         player.stop() #stops any currently palying tracks before starting a new one
         search_term= ''
         found_song = False
-
+        VoiceArray = UserVoiceInput.split(" ")
         #extracts everything after either the first 'play' or first 'song'
+        
         for i in VoiceArray:
             if found_song == True:
                 search_term = search_term +' ' + i
@@ -91,7 +115,8 @@ def Command1(UserVoiceInput):
 def Command2(UserVoiceInput):
         importlib.reload(import_alarms)
         importlib.reload(import_perma_alarms)
-
+        VoiceArray = UserVoiceInput.split(" ")
+        
         hourList = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
         minuteMono = ["ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
@@ -162,7 +187,8 @@ def Command3(UserVoiceInput):
         finalDay=int(time.strftime("%d"))+1
         finalYear=int(time.strftime("%Y"))
 
-
+        VoiceArray = UserVoiceInput.split(" ")
+        
         ###ADD THIRTIETH
         daySpecialCase ="thirtieth"
 
@@ -221,6 +247,7 @@ def Command3(UserVoiceInput):
 
 ##COMMAND THAT GATHERS EVENTS ON CALENDAR        
 def Command4(UserVoiceInput):
+        VoiceArray = UserVoiceInput.split(" ")
         currentYear = int(time.strftime("%Y"))
         currentMonth = int(time.strftime("%m"))
         currentDay =int(time.strftime("%d"))
@@ -251,6 +278,8 @@ def Command5(UserVoiceInput):
         importlib.reload(import_lists)
         string_add=''
 
+        VoiceArray = UserVoiceInput.split(" ")
+        
         note_found=False
 
         for i in VoiceArray:
@@ -268,7 +297,7 @@ def Command6(UserVoiceInput):
         importlib.reload(import_lists)
         synonyms = ["list", "named", "called", "titled", "dubbed", "labelled", "termed", "christened", "denominated", "termed", "styled", "identified", "entititled", "termed"] #these are all synonyms for 'named' so that the program can determine what to name the list
         title_after=0 #position of last word before title, default
-
+        VoiceArray = UserVoiceInput.split(" ")
 
         title = 'list' #default title
 
@@ -305,7 +334,8 @@ def Command7(UserVoiceInput):
         importlib.reload(import_lists)
         list_found = 0
         string_add = ''  #this is the element to be added to list
-
+        VoiceArray = UserVoiceInput.split(" ")
+        
         title_found = False
         for i in VoiceArray:#iterates through voice string
             if title_found == True:#first so that when title is found, title is not added
@@ -335,6 +365,7 @@ def Command8(UserVoiceInput):
         currentHour=int(time.strftime("%I"))
         currentMinute=int(time.strftime("%M"))
         currentFormat=time.strftime("%p")
+        VoiceArray = UserVoiceInput.split(" ")
         
         print(time.strftime("%I"))
         print(time.strftime("%M"))
@@ -356,96 +387,408 @@ def Command8(UserVoiceInput):
 def Command9(UserVoiceInput):
         player.pause()
 
+def WikiSearch (UserVoiceInput):
+        try:
+                DisplayAndSay(wikipedia.summary(UserVoiceInput, sentences=2))
+        except:
+                try:
+                        print(wikipedia.search(UserVoiceInput,results=2))
+                        DisplayAndSay(wikipedia.page(title =wikipedia.search(UserVoiceInput,results=2)[1]).summary(sentences=2))
+                except:
+                        DisplayAndSay("Umm. Something went wrong.")
+
 def Search (UserVoiceInput):
-        DisplayAndSay("I ran a search for " + UserVoiceInput +":")
-        search=pypygo.query(UserVoiceInput)
-        DisplayAndSay(search.abstract)
-
-
-DisplayAndSay('Welcome to the TOMMY voice assistant. Press enter to get started.')
-while True:
-        ##--Total Matched Words with Trigger Words--##
-        CommandOneCount = 0
-        CommandTwoCount = 0
-        CommandThreeCount = 0
-        CommandFourCount = 0
-        CommandFiveCount = 0
-        CommandSixCount = 0
-        CommandSevenCount = 0
-        CommandEightCount = 0
-        CommandNineCount = 0
-        
-
-        next = input('hit enter for input')
-        with sr.Microphone() as source:
-                print("Say something!")
-                r.adjust_for_ambient_noise(source)
-                audio = r.listen(source,timeout=1,phrase_time_limit=6)
-        print("processing...")
-        UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
-        #UserVoiceInput = input("debug manual input: ")
-        print(UserVoiceInput)
-        #UserVoiceInput = input() #placeholder voice-interpreted text
-        UserVoiceInput = UserVoiceInput.lower()
-        VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
-
-        #print (VoiceArray) ##DEBUG LINE
-
-        ##--Word Matching--##
-        for i in range (0, len(VoiceArray)):
-            for x in range (0, len(CommandOneWords)):
-                if VoiceArray[i] == CommandOneWords[x]:
-                    CommandOneCount+=1
-            for x in range (0, len(CommandTwoWords)):
-                if VoiceArray[i] == CommandTwoWords[x]:
-                    CommandTwoCount+=1
-            for x in range (0, len(CommandThreeWords)):
-                if VoiceArray[i] == CommandThreeWords[x]:
-                    CommandThreeCount+=1
-            for x in range (0, len(CommandFourWords)):
-                if VoiceArray[i] == CommandFourWords[x]:
-                    CommandFourCount+=1
-            for x in range (0, len(CommandFiveWords)):
-                if VoiceArray[i] == CommandFiveWords[x]:
-                    CommandFiveCount+=1
-            for x in range (0, len(CommandSixWords)):
-                if VoiceArray[i] == CommandSixWords[x]:
-                    CommandSixCount+=1
-            for x in range (0, len(CommandSevenWords)):
-                if VoiceArray[i] == CommandSevenWords[x]:
-                    CommandSevenCount+=1
-            for x in range (0, len(CommandEightWords)):
-                if VoiceArray[i] == CommandEightWords[x]:
-                    CommandEightCount+=1
-            for x in range (0, len(CommandNineWords)):
-                if VoiceArray[i] == CommandNineWords[x]:
-                    CommandNineCount+=1
-
-        ##--Command with most matches is called--##
-        Counts = [CommandNineCount,CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
-
-        Maximum=max(Counts)
-        if Maximum == 0:
-                Search(UserVoiceInput)
-        elif CommandOneCount== Maximum:
-            Command1(UserVoiceInput)
-        elif CommandTwoCount== Maximum:
-            Command2(UserVoiceInput)
-        elif CommandThreeCount== Maximum:
-            Command3(UserVoiceInput)
-        elif CommandFourCount== Maximum:
-            Command4(UserVoiceInput)
-        elif CommandFiveCount== Maximum:
-            Command5(UserVoiceInput)
-        elif CommandSixCount== Maximum:
-            Command6(UserVoiceInput)
-        elif CommandSevenCount== Maximum:
-            Command7(UserVoiceInput)
-        elif CommandEightCount== Maximum:
-            Command8(UserVoiceInput)
-        elif CommandNineCount== Maximum:
-            Command9(UserVoiceInput)
+        temp_process_math = UserVoiceInput.split()
+        re_string = ''
+        for i in temp_process_math:
+                add=i
+                print(i)
+                if i == 'square':
+                        add='squared'     #Wit AI often hears 'squared' as 'square; which causes it be a little shit. Hopefully this fixes that.
+                re_string = re_string + add
+                re_string = re_string + ' '
+                print(re_string)
+        res = client.query(re_string)
+        print(res['@success'])
+        print(res)
+        if res['@success'] == 'false':
+             WikiSearch(UserVoiceInput)
         else:
-                Search(UserVoiceInput)
+            try:
+                DisplayAndSay(next(res.results).text)
+            except:
+                WikiSearch(UserVoiceInput)
+        
+####MAIN LOOP###
+def MainLine():
+    #DisplayAndSay('Welcome to the TOMMY voice assistant. Press enter to get started.')
+
+    ##--Total Matched Words with Trigger Words--##
+    CommandOneCount = 0
+    CommandTwoCount = 0
+    CommandThreeCount = 0
+    CommandFourCount = 0
+    CommandFiveCount = 0
+    CommandSixCount = 0
+    CommandSevenCount = 0
+    CommandEightCount = 0
+    CommandNineCount = 0
+    CommandTenCount = 0
+    
+
+    #next = input('hit enter for input')
+    with sr.Microphone() as source:
+            print("Say something!")
+            r.adjust_for_ambient_noise(source)
+            audio = r.listen(source,timeout=1,phrase_time_limit=6)
+    print("processing...")
+    UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
+    #UserVoiceInput = input("debug manual input: ")
+    print(UserVoiceInput)
+    UserVoiceInput = UserVoiceInput.lower()
+    VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
+
+    #print (VoiceArray) ##DEBUG LINE
+
+    ##--Word Matching--##
+    for i in range (0, len(VoiceArray)):
+        for x in range (0, len(CommandOneWords)):
+            if VoiceArray[i] == CommandOneWords[x]:
+                CommandOneCount+=1
+        for x in range (0, len(CommandTwoWords)):
+            if VoiceArray[i] == CommandTwoWords[x]:
+                CommandTwoCount+=1
+        for x in range (0, len(CommandThreeWords)):
+            if VoiceArray[i] == CommandThreeWords[x]:
+                CommandThreeCount+=1
+        for x in range (0, len(CommandFourWords)):
+            if VoiceArray[i] == CommandFourWords[x]:
+                CommandFourCount+=1
+        for x in range (0, len(CommandFiveWords)):
+            if VoiceArray[i] == CommandFiveWords[x]:
+                CommandFiveCount+=1
+        for x in range (0, len(CommandSixWords)):
+            if VoiceArray[i] == CommandSixWords[x]:
+                CommandSixCount+=1
+        for x in range (0, len(CommandSevenWords)):
+            if VoiceArray[i] == CommandSevenWords[x]:
+                CommandSevenCount+=1
+        for x in range (0, len(CommandEightWords)):
+            if VoiceArray[i] == CommandEightWords[x]:
+                CommandEightCount+=1
+        for x in range (0, len(CommandNineWords)):
+            if VoiceArray[i] == CommandNineWords[x]:
+                CommandNineCount+=1
+
+    ##--Command with most matches is called--##
+    Counts = [CommandNineCount,CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
+
+    Maximum=max(Counts)
+    if Maximum == 0:
+            Search(UserVoiceInput)
+    elif CommandOneCount== Maximum:
+        Command1(UserVoiceInput)
+    elif CommandTwoCount== Maximum:
+        Command2(UserVoiceInput)
+    elif CommandThreeCount== Maximum:
+        Command3(UserVoiceInput)
+    elif CommandFourCount== Maximum:
+        Command4(UserVoiceInput)
+    elif CommandFiveCount== Maximum:
+        Command5(UserVoiceInput)
+    elif CommandSixCount== Maximum:
+        Command6(UserVoiceInput)
+    elif CommandSevenCount== Maximum:
+        Command7(UserVoiceInput)
+    elif CommandEightCount== Maximum:
+        Command8(UserVoiceInput)
+    elif CommandNineCount== Maximum:
+        Command9(UserVoiceInput)
+    elif CommandTenCount== Maximum:
+        WikiSearch(UserVoiceInput)
+    else:
+            Search(UserVoiceInput)
         
         
+
+
+
+###############################################################################
+
+def WriteAlarm(alarms_list):
+        write_data = open('import_alarms.py', 'w')
+        write_data.write("alarms_list=" + str(alarms_list))
+        write_data.close()
+        
+def WritePermaAlarm(alarms_list):
+        write_data = open('import_perma_alarms.py', 'w')
+        write_data.write("alarms_list=" + str(alarms_list))
+        write_data.close()
+
+def WriteList(lists):
+        write_data = open('import_lists.py', 'w')
+        write_data.write("lists=" +str(import_lists.lists))
+        write_data.close()        
+        
+class Pages(tk.Tk):
+
+    def __init__(self, *args, **kwargs):
+        
+        tk.Tk.__init__(self, *args, **kwargs)
+        container = tk.Frame(self)
+
+        container.pack(side="top", fill="both", expand = True)
+
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+
+        for F in (Main, Settings, Demo, Demo2, Demo3, ShellTom):
+
+            frame = F(container, self)
+
+            self.frames[F] = frame
+
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame(Main)
+
+    def show_frame(self, cont):
+
+        frame = self.frames[cont]
+        frame.tkraise()
+
+        
+class Main(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self,parent)
+        label = tk.Label(self, text="T.O.M.M.Y Voice Assistant", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+        
+        config_button = tk.Button(self,width=10,  text="Config",fg="red",
+                              command=lambda: controller.show_frame(Settings))
+        config_button.pack(pady=25)
+
+        run_button = tk.Button(self,width=10,  text="Run Assistant", fg="brown", 
+                                command=lambda: controller.show_frame(ShellTom))
+        run_button.pack(pady=25)
+
+        demo_button = tk.Button(self,width=10,  text="Demo", fg="blue",
+                                command=lambda: controller.show_frame(Demo))
+        demo_button.pack(pady=25)
+
+        back_button = tk.Button(self,width=10,  text="Quit", fg="black", bg="green",
+                                command=lambda: exit())
+        back_button.pack( side = tk.BOTTOM )
+
+class Settings(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Settings", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+        
+        #list label
+        redbutton = tk.Label(self, width=10, text="Lists",  fg="red")
+        redbutton.pack()
+
+        ##LIST BUTTONS
+        list_frame = tk.Frame(self)
+        list_frame.pack()
+        for List in import_lists.lists:
+            if List[0]!='notes':
+                button =tk.Button(list_frame, width =10, text = List[0])
+                button['command'] = lambda x=List, y=button: (import_lists.lists.remove(x), y.pack_forget(), self.update(), WriteList(import_lists.lists))
+                button.pack(side = tk.LEFT)
+           
+
+
+
+
+        #alarms label
+        greenbutton = tk.Label(self,width=10,  text="Alarms", fg="brown")
+        greenbutton.pack()
+
+        ##ALARM BUTTONS
+        button_array=['','','','','','','','','','','','','','','','','','',]
+        alarm_frame = tk.Frame(self)
+        alarm_frame.pack()
+        for Alarm in import_alarms.alarms_list:
+            alarm_button =tk.Button(alarm_frame, width =10, text = Alarm)
+            alarm_button['command'] = lambda x=Alarm, y=alarm_button:( import_alarms.alarms_list.remove(x),
+                                                y.pack_forget(),
+                                                self.update(),
+                                                WriteAlarm(import_alarms.alarms_list)
+                                                )
+            alarm_button.pack(side = tk.LEFT)
+
+
+
+        #perma label
+        perma_label = tk.Label(self, width=15, text="Permanent Alarms",  fg="Blue")
+        perma_label.pack()
+        
+        ##PERMA ALARM BUTTONS        
+        perma_alarm_frame = tk.Frame(self)
+        perma_alarm_frame.pack()        
+        for Alarm in import_perma_alarms.alarms_list:
+            perma_button =tk.Button(perma_alarm_frame, width=10, text = Alarm)
+            perma_button['command'] = lambda x=Alarm, y=perma_button:( import_perma_alarms.alarms_list.remove(x),
+                                                y.pack_forget(),
+                                                self.update(),
+                                                WritePermaAlarm(import_perma_alarms.alarms_list)
+                                                )
+            perma_button.pack(side = tk.LEFT)
+
+
+        volume_label =tk.Label(self, text="Volume")
+        volume_label.pack()
+        
+        volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
+        volume_bar.set(os.system('sudo amixer cget numid=3'))  #doesn't work on windows   
+        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer cset numid=3 " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
+        volume_bar.pack( )
+
+        voice_label =tk.Label(self, text="Voice Type")
+        voice_label.pack()
+        
+        voice_synth=''
+
+        radio_frame = tk.Frame(self)
+        radio_frame.pack()
+        
+        R1 = tk.Radiobutton(radio_frame, text="Male", variable=voice_synth, value=1)
+        R1.pack(anchor=tk.W)
+
+        R2 = tk.Radiobutton(radio_frame, text="Female", variable=voice_synth, value=2)
+        R2.pack(anchor=tk.W)
+
+        
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                                command=lambda: controller.show_frame(Main))
+        back_button.pack( side = tk.BOTTOM )
+
+class Demo(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Step 1", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        step_1 = tk.Label(self, width=80, text="There are many commands you can utlise in the TOMMY Voice Assistant.",  fg="Blue")
+        step_1.pack()
+
+        step_2 = tk.Label(self, width=80, text="To utilise these commands, first tap the 'Run Assistant' button on the home screen. ",  fg="Blue")
+        step_2.pack()
+
+        button_left = tk.Button(self, text="Back",state =tk.DISABLED)
+        button_left.pack(side = tk.LEFT)
+
+        button2 = tk.Button(self, text="Next",
+                            command=lambda: controller.show_frame(Demo2))
+        button2.pack(side = tk.RIGHT)
+
+        ##importing images
+        self.step1 = tk.PhotoImage(file="step1.gif")
+
+        image = tk.Label(self, image = self.step1)
+        image.image = self.step1
+        image.pack()    
+
+        
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(Main))
+        back_button.pack( side = tk.BOTTOM )
+
+class Demo2(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Step 2", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        step_1 = tk.Label(self, width=80, text="Next you will want to tap the 'Ask Question' centered on the screen.",  fg="Blue")
+        step_1.pack()
+
+        step_2 = tk.Label(self, width=80, text="Speak your request into the microphone.",  fg="Blue")
+        step_2.pack()
+
+        button_left = tk.Button(self, text="Back",
+                            command=lambda: controller.show_frame(Demo))
+        button_left.pack(side = tk.LEFT)
+
+              
+        button2 = tk.Button(self, text="Next",
+                            command=lambda: controller.show_frame(Demo3))
+        button2.pack(side=tk.RIGHT)
+
+        self.step2 = tk.PhotoImage(file="step2.gif")
+
+        image = tk.Label(self, image = self.step2)
+        image.image = self.step2
+        image.pack()    
+
+        
+        
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(Main))
+        back_button.pack( side = tk.BOTTOM )
+
+class Demo3(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Step 3", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        step_1 = tk.Label(self, width=80, text="Wait for TOMMY to process your request and then hear your resut.",  fg="Blue")
+        step_1.pack()
+
+        step_2 = tk.Label(self, width=80, text="Congratulations! You have learnt how to use the simple TOMMY interface.",  fg="Blue")
+        step_2.pack()
+
+
+        button_left = tk.Button(self, text="Back",
+                            command=lambda: controller.show_frame(Demo2))
+        button_left.pack(side = tk.LEFT)
+
+        button2 = tk.Button(self, text="Next", state = tk.DISABLED)
+        button2.pack(side=tk.RIGHT)
+
+
+        self.step3 = tk.PhotoImage(file="step3.gif")
+
+        image = tk.Label(self, image = self.step3)
+        image.image = self.step3
+        image.pack()    
+
+        
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(Main))
+        back_button.pack( side = tk.BOTTOM )        
+class ShellTom(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Main Program", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        button2 = tk.Button(self, width = 20, height=5, text="Ask Question",
+                            command=lambda: MainLine())
+        button2.pack()
+
+
+        global out_text #lets TOMMY display what he is saying
+        out_text = tk.Label(self, text="")
+        out_text.pack()
+
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(Main))
+        back_button.pack( side = tk.BOTTOM )
+
+        
+app = Pages()
+app.geometry("480x320")
+app.mainloop()
