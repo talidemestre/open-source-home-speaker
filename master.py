@@ -13,7 +13,6 @@ LARGE_FONT= ("Verdana", 12)
 
 #####NEW MASTER
 #importing search
-import pypygo
 import wikipedia
 import wolframalpha
 client = wolframalpha.Client('8VTX85-9AA7GU7T3T')
@@ -743,7 +742,7 @@ class Demo3(tk.Frame):
         label = tk.Label(self, text="Step 3", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="Wait for TOMMY to process your request and then hear your resut.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Wait for TOMMY to process your request and then hear your result.",  fg="Blue")
         step_1.pack()
 
         step_2 = tk.Label(self, width=80, text="Congratulations! You have learnt how to use the simple TOMMY interface.",  fg="Blue")
