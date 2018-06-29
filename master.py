@@ -1,7 +1,6 @@
 # My code for switching between menus was derived from: http://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
 # License: http://creativecommons.org/licenses/by-sa/3.0/	
 import tkinter as tk
-import win32api
 
 
 
