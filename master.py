@@ -774,4 +774,5 @@ class ShellTom(tk.Frame):
         
 app = Pages()
 app.geometry("320x240")
+app.attributes('-fullscreen', True)
 app.mainloop()
