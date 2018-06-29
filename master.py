@@ -1,7 +1,7 @@
 # My code for switching between menus was derived from: http://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
 # License: http://creativecommons.org/licenses/by-sa/3.0/	
 import tkinter as tk
-
+import win32api
 
 
 
@@ -11,9 +11,7 @@ import os
 
 LARGE_FONT= ("Verdana", 12)
 
-#####NEW MASTER
-#importing search
-import pypygo
+#####NEW MASTER#importing search
 import wikipedia
 import wolframalpha
 client = wolframalpha.Client('8VTX85-9AA7GU7T3T')
@@ -569,15 +567,15 @@ class Main(tk.Frame):
         
         config_button = tk.Button(self,width=10,  text="Config",fg="red",
                               command=lambda: controller.show_frame(Settings))
-        config_button.pack(pady=25)
+        config_button.pack(pady=12)
 
         run_button = tk.Button(self,width=10,  text="Run Assistant", fg="brown", 
                                 command=lambda: controller.show_frame(ShellTom))
-        run_button.pack(pady=25)
+        run_button.pack(pady=12)
 
         demo_button = tk.Button(self,width=10,  text="Demo", fg="blue",
                                 command=lambda: controller.show_frame(Demo))
-        demo_button.pack(pady=25)
+        demo_button.pack(pady=12)
 
         back_button = tk.Button(self,width=10,  text="Quit", fg="black", bg="green",
                                 command=lambda: exit())
@@ -588,7 +586,7 @@ class Settings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Settings", font=LARGE_FONT)
-        label.pack(pady=8,padx=10)
+        label.pack(pady=2,padx=10)
         
         #list label
         redbutton = tk.Label(self, width=10, text="Lists",  fg="red")
@@ -651,20 +649,6 @@ class Settings(tk.Frame):
         volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer cset numid=3 " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
-        voice_label =tk.Label(self, text="Voice Type")
-        voice_label.pack()
-        
-        voice_synth=''
-
-        radio_frame = tk.Frame(self)
-        radio_frame.pack()
-        
-        R1 = tk.Radiobutton(radio_frame, text="Male", variable=voice_synth, value=1)
-        R1.pack(anchor=tk.W)
-
-        R2 = tk.Radiobutton(radio_frame, text="Female", variable=voice_synth, value=2)
-        R2.pack(anchor=tk.W)
-
         
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                                 command=lambda: controller.show_frame(Main))
@@ -677,10 +661,10 @@ class Demo(tk.Frame):
         label = tk.Label(self, text="Step 1", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="There are many commands you can utlise in the TOMMY Voice Assistant.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Many commands are in the TOMMY Voice Assistant.",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="To utilise these commands, first tap the 'Run Assistant' button on the home screen. ",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="To begin tap the 'Run Assistant' button on the home screen. ",  fg="Blue")
         step_2.pack()
 
         button_left = tk.Button(self, text="Back",state =tk.DISABLED)
@@ -709,7 +693,7 @@ class Demo2(tk.Frame):
         label = tk.Label(self, text="Step 2", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="Next you will want to tap the 'Ask Question' centered on the screen.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Next tap the 'Ask Question' button centered on the screen.",  fg="Blue")
         step_1.pack()
 
         step_2 = tk.Label(self, width=80, text="Speak your request into the microphone.",  fg="Blue")
@@ -743,10 +727,10 @@ class Demo3(tk.Frame):
         label = tk.Label(self, text="Step 3", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="Wait for TOMMY to process your request and then hear your resut.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="TOMMY will process your request, wait for your result.",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="Congratulations! You have learnt how to use the simple TOMMY interface.",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="Nice work! This is how to use the simple TOMMY interface.",  fg="Blue")
         step_2.pack()
 
 
@@ -777,7 +761,7 @@ class ShellTom(tk.Frame):
 
         button2 = tk.Button(self, width = 20, height=5, text="Ask Question",
                             command=lambda: MainLine())
-        button2.pack()
+        button2.pack(pady=30)
 
 
         global out_text #lets TOMMY display what he is saying
@@ -790,5 +774,5 @@ class ShellTom(tk.Frame):
 
         
 app = Pages()
-app.geometry("480x320")
+app.geometry("320x240")
 app.mainloop()
