@@ -390,9 +390,10 @@ def WikiSearch (UserVoiceInput):
         except:
                 try:
                         print(wikipedia.search(UserVoiceInput,results=2))
-                        DisplayAndSay(wikipedia.page(title =wikipedia.search(UserVoiceInput,results=2)[1]).summary(sentences=2))
+                        DisplayAndSay(wikipedia.summary(wikipedia.search(UserVoiceInput,results=2)[0], sentences =2))
+                        #DisplayAndSay(wikipedia.page(title =wikipedia.search(UserVoiceInput,results=2)[0]).summary(sentences=2))
                 except:
-                        DisplayAndSay("Umm. Something went wrong.")
+                        DisplayAndSay("Um. Something went wrong.")
 
 def Search (UserVoiceInput):
         temp_process_math = UserVoiceInput.split()
@@ -435,9 +436,8 @@ def MainLine():
 
     #next = input('hit enter for input')
     with sr.Microphone() as source:
-            print("Say something!")
-            r.adjust_for_ambient_noise(source)
-            audio = r.listen(source,timeout=1,phrase_time_limit=6)
+            print ("Listening:")
+            audio = r.listen(source,timeout=2)#,timeout=1,phrase_time_limit=6)
     print("processing...")
     UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
     #UserVoiceInput = input("debug manual input: ")
@@ -476,9 +476,12 @@ def MainLine():
         for x in range (0, len(CommandNineWords)):
             if VoiceArray[i] == CommandNineWords[x]:
                 CommandNineCount+=1
+        for x in range (0, len(CommandTenWords)):
+            if VoiceArray[i] == CommandTenWords[x]:
+                CommandTenCount+=1                
 
     ##--Command with most matches is called--##
-    Counts = [CommandNineCount,CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
+    Counts = [CommandTenCount, CommandNineCount,CommandEightCount,CommandSevenCount,CommandSixCount,CommandFiveCount,CommandFourCount,CommandThreeCount,CommandTwoCount,CommandOneCount]
 
     Maximum=max(Counts)
     if Maximum == 0:
@@ -774,5 +777,5 @@ class ShellTom(tk.Frame):
         
 app = Pages()
 app.geometry("320x240")
-app.attributes('-fullscreen', True)
+#app.attributes('-fullscreen', True)
 app.mainloop()
