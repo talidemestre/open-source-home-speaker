@@ -432,6 +432,7 @@ def MainLine():
     #next = input('hit enter for input')
     with sr.Microphone() as source:
             print ("Listening:")
+            r.adjust_for_ambient_noise(source, duration=0.3)
             audio = r.listen(source,timeout=2)#,timeout=1,phrase_time_limit=6)
     print("processing...")
     UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
