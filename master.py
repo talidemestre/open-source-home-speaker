@@ -37,9 +37,7 @@ import speech_recognition as sr
 r = sr.Recognizer()
 WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 
-#text to speech
-import pyttsx3
-engine = pyttsx3.init()
+
 
 
 
@@ -65,10 +63,7 @@ player.play()
 ##--Core Functions--##
 def DisplayAndSay(text):
         print(text)
-        out_text.configure(text=text)
-        engine.say(text)        #vocalizes and displays the text
-        engine.runAndWait()
-
+        os.system('flite -t "' +text +'"')
 ##--Command Functions--##
 def Command1(UserVoiceInput):
         global player
