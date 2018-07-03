@@ -641,8 +641,8 @@ class Settings(tk.Frame):
         volume_label.pack()
         
         volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
-        volume_bar.set(os.system("sudo amixer sget 'PCM'"))  #doesn't work on windows   
-        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
+        volume_bar.set(os.system("amixer sget 'PCM'"))  #doesn't work on windows   
+        volume_bar['command'] = lambda y=volume_bar: os.system("amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
         
@@ -809,5 +809,5 @@ class ReadLists(tk.Frame):
         
 app = Pages()
 app.geometry("320x240")
-#app.attributes('-fullscreen', True)
+app.attributes('-fullscreen', True)
 app.mainloop()
