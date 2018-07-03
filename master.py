@@ -641,7 +641,7 @@ class Settings(tk.Frame):
         volume_label.pack()
         
         volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
-        volume_bar.set(os.system("amixer sget 'PCM'"))  #doesn't work on windows   
+        volume_bar.set(100)
         volume_bar['command'] = lambda y=volume_bar: os.system("amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
