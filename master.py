@@ -431,7 +431,7 @@ def MainLine():
     #next = input('hit enter for input')
     with sr.Microphone() as source:
             print ("Listening:")
-            audio = r.listen(source,timeout=2)#,timeout=1,phrase_time_limit=6)
+            audio = r.listen(source,timeout=2,phrase_time_limit=6)
     print("processing...")
     UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
     #UserVoiceInput = input("debug manual input: ")
