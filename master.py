@@ -39,8 +39,6 @@ WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 
 
 
-
-
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
 CommandTwoWords = ["set", "alarm", "timer"]
@@ -64,6 +62,7 @@ player.play()
 def DisplayAndSay(text):
         print(text)
         os.system('flite -t "' +text +'"')
+
 ##--Command Functions--##
 def Command1(UserVoiceInput):
         global player
@@ -432,7 +431,6 @@ def MainLine():
     #next = input('hit enter for input')
     with sr.Microphone() as source:
             print ("Listening:")
-            r.adjust_for_ambient_noise(source, duration=0.3)
             audio = r.listen(source,timeout=2)#,timeout=1,phrase_time_limit=6)
     print("processing...")
     UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
@@ -540,7 +538,7 @@ class Pages(tk.Tk):
 
         self.frames = {}
 
-        for F in (Main, Settings, Demo, Demo2, Demo3, ShellTom):
+        for F in (Main, Settings, Demo, Demo2, Demo3, ShellTom, ReadLists):
 
             frame = F(container, self)
 
@@ -643,8 +641,8 @@ class Settings(tk.Frame):
         volume_label.pack()
         
         volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
-        volume_bar.set(os.system('sudo amixer cget numid=3'))  #doesn't work on windows   
-        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer cset numid=3 " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
+        volume_bar.set(os.system("sudo amixer sget 'PCM'"))  #doesn't work on windows   
+        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
         
@@ -757,19 +755,57 @@ class ShellTom(tk.Frame):
         label = tk.Label(self, text="Main Program", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        button2 = tk.Button(self, width = 20, height=5, text="Ask Question",
+        ask_quest = tk.Button(self, width = 20, height=5, text="Ask Question",
                             command=lambda: MainLine())
-        button2.pack(pady=30)
+        ask_quest.pack(pady=5)
 
 
         global out_text #lets TOMMY display what he is saying
         out_text = tk.Label(self, text="")
         out_text.pack()
 
-        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+        view_lists = tk.Button(self, width = 20, text="View Lists",
+                            command=lambda: controller.show_frame(ReadLists))
+        view_lists.pack(pady=5)        
+
+        back_button = tk.Button(self, width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
         back_button.pack( side = tk.BOTTOM )
+class ReadLists(tk.Frame):
 
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Lists", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        list_labels=[]
+        list_text=[]
+
+        for array in range(0, len(import_lists.lists)):
+                
+                list_text.append('')
+                
+                for item in range(0, len(import_lists.lists[array])):
+                               if item == 0:
+                                       list_text[array]= list_text[array] + str(import_lists.lists[array][item]).capitalize() + ':'
+                               else:
+                                       list_text[array] = list_text[array]  + ', ' + import_lists.lists[array][item]
+                                       
+        for i in range(0, len(list_text)):
+                list_labels.append(tk.Label(self, text=list_text[i], fg='blue'))
+                list_labels[i].pack()
+                
+                
+        
+        #list_1 = tk.Label(self, text=list_1_text, fg='blue')
+        #list_1.pack()
+        
+        #list_2 = tk.Label(self, text=list_2_text, fg='blue')
+        #list_2.pack()
+        
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(ShellTom))
+        back_button.pack( side = tk.BOTTOM )
         
 app = Pages()
 app.geometry("320x240")
