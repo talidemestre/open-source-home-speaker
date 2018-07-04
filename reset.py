@@ -24,6 +24,7 @@ for x in years:
     year+=1
 
 
+#writes data to external files
 write_data = open('import_calendar.py', 'w')
 write_data.write("creationYear=" + str(currentYear) + "\nyears =" + str(years))
 write_data.close()
