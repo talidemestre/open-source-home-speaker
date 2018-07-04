@@ -2,19 +2,19 @@
 # License: http://creativecommons.org/licenses/by-sa/3.0/	
 import tkinter as tk
 
-
-
+#modules for lists and alarms
 import importlib
 import os
 
 
 LARGE_FONT= ("Verdana", 12)
 
-#####NEW MASTER#importing search
+#importing search
 import wikipedia
 import wolframalpha
 client = wolframalpha.Client('8VTX85-9AA7GU7T3T')
 
+#modules for alarms and lists
 import time
 import importlib
 
@@ -24,7 +24,7 @@ import import_alarms
 import import_perma_alarms
 import import_lists
 
-#music search
+#modules for music search
 import pafy
 import vlc
 import urllib.request
@@ -32,16 +32,15 @@ import urllib.parse
 import re
 
 
-#speech to text
+#modules for speech recognition
 import speech_recognition as sr
 r = sr.Recognizer()
 WIT_AI_KEY = "JL4IADZ4ODXSZ6RARKDP3IMMO66OSPS6"
 
-#text to speech
+
+#modules for text to speech
 import pyttsx3
 engine = pyttsx3.init()
-
-
 
 ##--Trigger Words For Each Command--##
 CommandOneWords = ["play", "music", "song"]
@@ -68,7 +67,7 @@ def DisplayAndSay(text):
         out_text.configure(text=text)
         engine.say(text)        #vocalizes and displays the text
         engine.runAndWait()
-
+        
 ##--Command Functions--##
 def Command1(UserVoiceInput):
         global player
@@ -279,6 +278,7 @@ def Command5(UserVoiceInput):
         
         note_found=False
 
+        #checking if note already exists
         for i in VoiceArray:
             if note_found == True:
                 string_add = string_add + " " + i
@@ -289,7 +289,7 @@ def Command5(UserVoiceInput):
         write_data = open('import_lists.py', 'w')
         write_data.write("lists=" +str(import_lists.lists))
         write_data.close()
-        DisplayAndSay("Note: '" + string_add + "', added to list.")
+        DisplayAndSay("Note: '" + string_add + "', added to notes.")
 def Command6(UserVoiceInput):
         importlib.reload(import_lists)
         synonyms = ["list", "named", "called", "titled", "dubbed", "labelled", "termed", "christened", "denominated", "termed", "styled", "identified", "entititled", "termed"] #these are all synonyms for 'named' so that the program can determine what to name the list
@@ -343,7 +343,7 @@ def Command7(UserVoiceInput):
                         title_found = True#ends matching attempts
                         list_found=x#index of list
 
-                        
+        #checking if list already exists                     
         if list_found == 0:
                 DisplayAndSay("Could not find specified list.")
         else:
@@ -368,7 +368,7 @@ def Command8(UserVoiceInput):
         print(time.strftime("%M"))
         print(time.strftime("%p"))
 
-        
+        #stops alarm from ringing        
         for i in (0, len(import_alarms.alarms_list)-1):
             if import_alarms.alarms_list[i][0] == currentHour:
                 if import_alarms.alarms_list[i][1] == currentMinute:
@@ -377,20 +377,24 @@ def Command8(UserVoiceInput):
 
         DisplayAndSay("Alarm cancelled.")
         print([currentHour, currentMinute, currentFormat])
-        print (import_alarms.alarms_list)                         
+        print (import_alarms.alarms_list)
+        
+        #deletes alarm from external file
         write_data = open('import_alarms.py', 'w')
         write_data.write("alarms_list=" + str(import_alarms.alarms_list))
         write_data.close()
+        
 def Command9(UserVoiceInput):
+        #pauses music
         player.pause()
 
 def WikiSearch (UserVoiceInput):
         try:
-                DisplayAndSay(wikipedia.summary(UserVoiceInput, sentences=2))
+                DisplayAndSay(wikipedia.summary(UserVoiceInput, sentences=1))
         except:
                 try:
                         print(wikipedia.search(UserVoiceInput,results=2))
-                        DisplayAndSay(wikipedia.summary(wikipedia.search(UserVoiceInput,results=2)[0], sentences =2))
+                        DisplayAndSay(wikipedia.summary(wikipedia.search(UserVoiceInput,results=2)[0], sentences =1))
                         #DisplayAndSay(wikipedia.page(title =wikipedia.search(UserVoiceInput,results=2)[0]).summary(sentences=2))
                 except:
                         DisplayAndSay("Um. Something went wrong.")
@@ -437,7 +441,7 @@ def MainLine():
     #next = input('hit enter for input')
     with sr.Microphone() as source:
             print ("Listening:")
-            audio = r.listen(source,timeout=2)#,timeout=1,phrase_time_limit=6)
+            audio = r.listen(source,timeout=2,phrase_time_limit=6)
     print("processing...")
     UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
     #UserVoiceInput = input("debug manual input: ")
@@ -515,6 +519,7 @@ def MainLine():
 
 ###############################################################################
 
+#The following functions write to external files.
 def WriteAlarm(alarms_list):
         write_data = open('import_alarms.py', 'w')
         write_data.write("alarms_list=" + str(alarms_list))
@@ -529,7 +534,10 @@ def WriteList(lists):
         write_data = open('import_lists.py', 'w')
         write_data.write("lists=" +str(import_lists.lists))
         write_data.close()        
-        
+
+###This is the beginning of tkinter(gui) code
+
+#This is the code used as the root for all of the other pages.
 class Pages(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -538,13 +546,14 @@ class Pages(tk.Tk):
         container = tk.Frame(self)
 
         container.pack(side="top", fill="both", expand = True)
-
+        
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-
-        for F in (Main, Settings, Demo, Demo2, Demo3, ShellTom):
+        
+        #all other pages must be in this loop
+        for F in (Main, Settings, Demo, Demo2, Demo3, ShellTom, ReadLists):
 
             frame = F(container, self)
 
@@ -559,7 +568,7 @@ class Pages(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-        
+#This is the page you see upon first starting the program.        
 class Main(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -583,6 +592,7 @@ class Main(tk.Frame):
                                 command=lambda: exit())
         back_button.pack( side = tk.BOTTOM )
 
+#This is the page labelled 'config'.
 class Settings(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -647,8 +657,9 @@ class Settings(tk.Frame):
         volume_label.pack()
         
         volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
-        volume_bar.set(os.system('sudo amixer cget numid=3'))  #doesn't work on windows   
-        volume_bar['command'] = lambda y=volume_bar: os.system("sudo amixer cset numid=3 " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
+        volume_bar.set(100)
+        #this allows the volume of the raspberry pi device to be controlled
+        volume_bar['command'] = lambda y=volume_bar: os.system("amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
         
@@ -656,6 +667,7 @@ class Settings(tk.Frame):
                                 command=lambda: controller.show_frame(Main))
         back_button.pack( side = tk.BOTTOM )
 
+#the next 3 classes are the 'frames' of a slideshow that teach the user how to use the software
 class Demo(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -666,7 +678,7 @@ class Demo(tk.Frame):
         step_1 = tk.Label(self, width=80, text="Many commands are in the TOMMY Voice Assistant.",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="To begin tap the 'Run Assistant' button on the home screen. ",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="To begin tap the 'Run Assistant' button.",  fg="Blue")
         step_2.pack()
 
         button_left = tk.Button(self, text="Back",state =tk.DISABLED)
@@ -695,7 +707,7 @@ class Demo2(tk.Frame):
         label = tk.Label(self, text="Step 2", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="Next tap the 'Ask Question' button centered on the screen.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Next tap the 'Ask Question' button.",  fg="Blue")
         step_1.pack()
 
         step_2 = tk.Label(self, width=80, text="Speak your request into the microphone.",  fg="Blue")
@@ -729,10 +741,10 @@ class Demo3(tk.Frame):
         label = tk.Label(self, text="Step 3", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        step_1 = tk.Label(self, width=80, text="TOMMY will process your request, wait for your result.",  fg="Blue")
+        step_1 = tk.Label(self, width=80, text="Wait for your result to process...",  fg="Blue")
         step_1.pack()
 
-        step_2 = tk.Label(self, width=80, text="Nice work! This is how to use the simple TOMMY interface.",  fg="Blue")
+        step_2 = tk.Label(self, width=80, text="This is how to use the simple interface.",  fg="Blue")
         step_2.pack()
 
 
@@ -753,7 +765,9 @@ class Demo3(tk.Frame):
         
         back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
-        back_button.pack( side = tk.BOTTOM )        
+        back_button.pack( side = tk.BOTTOM )
+
+#this is the menu from which the user asks questions
 class ShellTom(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -761,21 +775,54 @@ class ShellTom(tk.Frame):
         label = tk.Label(self, text="Main Program", font=LARGE_FONT)
         label.pack(pady=8,padx=10)
 
-        button2 = tk.Button(self, width = 20, height=5, text="Ask Question",
+        ask_quest = tk.Button(self, width = 20, height=5, text="Ask Question",
                             command=lambda: MainLine())
-        button2.pack(pady=30)
+        ask_quest.pack(pady=5)
 
 
         global out_text #lets TOMMY display what he is saying
         out_text = tk.Label(self, text="")
         out_text.pack()
 
-        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+        view_lists = tk.Button(self, width = 20, text="View Lists",
+                            command=lambda: controller.show_frame(ReadLists))
+        view_lists.pack(pady=5)        
+
+        back_button = tk.Button(self, width=10,  text="Back", fg="black", bg="green",
                          command=lambda: controller.show_frame(Main))
         back_button.pack( side = tk.BOTTOM )
+#the menu the viewer reads lists from
+class ReadLists(tk.Frame):
 
-        
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Lists", font=LARGE_FONT)
+        label.pack(pady=8,padx=10)
+
+        list_labels=[]
+        list_text=[]
+
+        #generates label objects for each list and then packs them into the tkinter frame
+        for array in range(0, len(import_lists.lists)):
+                
+                list_text.append('')
+                
+                for item in range(0, len(import_lists.lists[array])):
+                               if item == 0:
+                                       list_text[array]= list_text[array] + str(import_lists.lists[array][item]).capitalize() + ':'
+                               else:
+                                       list_text[array] = list_text[array]  + ', ' + import_lists.lists[array][item]
+                                       
+        for i in range(0, len(list_text)):
+                list_labels.append(tk.Label(self, text=list_text[i], fg='blue'))
+                list_labels[i].pack()
+                
+        back_button = tk.Button(self,width=10,  text="Back", fg="black", bg="green",
+                         command=lambda: controller.show_frame(ShellTom))
+        back_button.pack( side = tk.BOTTOM )
+
+#initiates tkinter        
 app = Pages()
 app.geometry("320x240")
-#app.attributes('-fullscreen', True)
+app.attributes('-fullscreen', True)
 app.mainloop()
