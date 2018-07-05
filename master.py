@@ -435,6 +435,7 @@ def MainLine():
     CommandTenCount = 0
     
 
+<<<<<<< HEAD
     
     #with sr.Microphone() as source:
     #        print ("Listening:")
@@ -442,6 +443,15 @@ def MainLine():
     #print("processing...")
     #UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
     UserVoiceInput = input("debug manual input: ")
+=======
+    #next = input('hit enter for input')
+    with sr.Microphone() as source:
+            print ("Listening:")
+            audio = r.listen(source,timeout=2,phrase_time_limit=6)
+    print("processing...")
+    UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
+    #UserVoiceInput = input("debug manual input: ")
+>>>>>>> 9f3be96d330e119d78c934259fef3491cfed78e2
     print(UserVoiceInput)
     UserVoiceInput = UserVoiceInput.lower()
     VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
@@ -655,7 +665,10 @@ class Settings(tk.Frame):
         
         volume_bar = tk.Scale(self,width=10, orient=tk.HORIZONTAL, showvalue=0 )
         volume_bar.set(100)
+<<<<<<< HEAD
         #this allows the volume of the raspberry pi device to be controlled
+=======
+>>>>>>> 9f3be96d330e119d78c934259fef3491cfed78e2
         volume_bar['command'] = lambda y=volume_bar: os.system("amixer sset 'PCM' " + str(volume_bar.get()) + "%")   #doesn't work on windows                                           
         volume_bar.pack( )
 
