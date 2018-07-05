@@ -436,12 +436,12 @@ def MainLine():
     
 
     
-    #with sr.Microphone() as source:
-    #        print ("Listening:")
-    #        audio = r.listen(source,timeout=2,phrase_time_limit=6)
-    #print("processing...")
-    #UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
-    UserVoiceInput = input("debug manual input: ")
+    with sr.Microphone() as source:
+            print ("Listening:")
+            audio = r.listen(source,timeout=2,phrase_time_limit=6)
+    print("processing...")
+    UserVoiceInput = r.recognize_wit(audio, key=WIT_AI_KEY)
+    #UserVoiceInput = input("debug manual input: ")
     print(UserVoiceInput)
     UserVoiceInput = UserVoiceInput.lower()
     VoiceArray = UserVoiceInput.split(" ") #turns the voice input into an iterable
