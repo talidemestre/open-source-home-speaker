@@ -231,7 +231,7 @@ def Command3(UserVoiceInput):
                     if testDate[word] == 'two':
                         if testDate[word+1] == 'thousand':
                             for y in range(0, len(yearSuffix)):
-                                if testDate[word+1] == yearSuffix[y]:
+                                if testDate[word+1] == yearSuffix[y] or testDate[word+2] == yearSuffix[y]:
                                     finalYear = y + import_calendar.creationYear
 
                 #print(finalDay, finalMonth, finalYear)
